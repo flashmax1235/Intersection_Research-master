@@ -1,3 +1,5 @@
+import csv, codecs, cStringIO
+
 class UnicodeReader:
     """
     A CSV reader which will iterate over lines in the CSV file "f",

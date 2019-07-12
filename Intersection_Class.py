@@ -49,17 +49,21 @@ class Intersection:
     # Intersection Criteria
     inter_side_length = 100
     inter_max_speed = 20
-    inter_tolerance_time = 0.12  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
+    inter_tolerance_time = 0.5  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
+
+    # set up
+    starTime = 0
 
     def __init__(self):
         self.start = 1
         self.head = Reservation(0, 0, 0, 0, 0)
         self.tail = Reservation(99, 0, 0, 0, 0)
         self.size = 0
+        self.starTime = time.time()
 
     def find_closest(self, res):
         if self.head.nextt is None:
-            print("List is empty, returning head")
+            # ("List is empty, returning head")
             return self.head
         else:
             temp = self.head.nextt  # closest
@@ -129,7 +133,7 @@ class Intersection:
                 self.head.nextt.nextt = self.tail
                 self.tail.prev = new_node
                 new_node.prev = self.head
-                #return
+                # return
             else:
                 # find closest and add before/after
                 current_node = self.find_closest(res)
@@ -230,7 +234,7 @@ class Intersection:
                     res.requestedAccel = can_right[1]
                     self.insertBetween(right, right.nextt, res)
                 else:
-                    print("shit nothing fits...")
+                    #  print("shit nothing fits...")
                     exit()
         return res.requestedAccel, res.expectedTime
 
@@ -257,7 +261,7 @@ class Intersection:
             # print "left deceleration approved!"
             return True, left
         elif (left > 0) and (left < self.car_max_accel):
-            print
+            # print
             # "left acceleration approved!"
             return True, left
         else:
@@ -287,12 +291,12 @@ class Intersection:
             # Start at head and check if next is not tail
             while current_node.nextt != None:
                 # Add current node to list and traverse forward
-                # value_list.append(current_node.toString())
+                value_list.append(current_node.toString())
                 print current_node.toString()
                 current_node = current_node.nextt
-            # print value_list
+            # rint value_list
         else:
-            print "No nodes"
+            # print "No nodes"
             return False
 
     # check if lane is safe: (1)lane is empty at that time (2) does not cut the line in its lane
@@ -304,7 +308,7 @@ class Intersection:
         # search all nodes TODO:only search near by nodes
         # if empty
         if self.head.nextt is None:
-            print("List is empty, adding")
+            # print("List is empty, adding")
             return True
         # if not empty
         else:
@@ -314,11 +318,11 @@ class Intersection:
                         (n.expectedTime > res.expectedTime) and (
                         n.lane == res.lane)):  # (1) colision in lane  (2) line skip   TODO:specify whitch criteria it failed at
                     # print abs(n.expectedTime - res.expectedTime)
-                    print "no room"
+                    # print "no room"
                     return False
                 n = n.nextt
             if n is self.tail:
-                print("appears to be room")
+                # print("appears to be room")
                 return True
 
     # find open space to left: (1) size greater than tolerance*2 (2) no line skipping
@@ -374,27 +378,3 @@ class Intersection:
         new_node.prev = spot1
         spot1.nextt = new_node
         spot2.prev = new_node
-
-
-"""
-temp = time.time()
-inter = Intersection()
-
-for i in range(10):
-    vin = i
-    lane = random.randint(1, 4)
-    delay = random.randrange(1, 30, 1) / 60.0
-    speed = random.randrange(90, 110, 1) / 10.0
-    accel = random.randrange(-5, 5, 1) / 10.0
-    # VIN, speed, accel, enterTime, lane
-    time.sleep(delay)
-    test_res = Reservation(vin, speed, accel, time.time(), lane)
-    print test_res.toString()
-    inter.addReservation3(test_res)
-    inter.print_as_list()
-    print "\n\n"
-
-print "\n\n\ntotoal calc time: " + str(time.time() - temp)
-
-inter.print_as_list()
-"""
