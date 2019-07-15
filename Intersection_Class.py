@@ -232,6 +232,16 @@ class Intersection:
                     # adjust estimated tim
                     res.expectedTime = right.expectedTime + self.inter_tolerance_time
                     res.requestedAccel = can_right[1]
+
+
+                    """
+                    here you check to see if next quadrent is avalible
+                    if yes:
+                        continue
+                    else:
+                        search for next opening in P1
+                        repeat
+                    """
                     self.insertBetween(right, right.nextt, res)
                 else:
                     #  print("shit nothing fits...")
