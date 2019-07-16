@@ -35,7 +35,7 @@ public class driver {
 
 		// Location of file to read
 		File file = new File(
-				"C:/Users/maxwe/Documents/Research 2019/Algorithm/Intersection_Research-master/carData.csv");
+				"/home/maxwell/Documents/Scripts/Intersection_Research-master/carData.csv");
 
 		// big data
 		String[] thisLines;

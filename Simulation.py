@@ -7,7 +7,7 @@ import csv
 import Tkinter as tk
 
 # start intersection
-intersection = IC.Intersection()
+intersection = IC.Intersection("test")
 list_car_data = []
 
 for i in range(20):

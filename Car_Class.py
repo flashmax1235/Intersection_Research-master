@@ -43,10 +43,11 @@ class Car:
     car_max_decel = -3
     car_max_speed = 50
 
-    # Intersection Criteria
+    # Intersection Criteria/specs
     inter_side_length = IC.Intersection.inter_side_length
     inter_max_speed = IC.Intersection.inter_max_speed  # TODO actually use this....
     inter_tolerance_time = IC.Intersection.inter_tolerance_time  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
+    inter_size = IC.Intersection.inter_size # ex: 10x10m inside
 
     # position
     posX = 0
@@ -63,7 +64,8 @@ class Car:
     exitTime = 0  # time leaving intersection
 
     # Proposed Timeline
-    expectedTime0 = 0  # original specs
+    expectedTime0 = 0  # original specs to 95m ***100m for now
+    expectedTime00 = 0  #original specs to 105m
     expectedTime01 = 0  # after first update to middle
     expectedTime1 = 0  # after seconds update to end
 
@@ -80,6 +82,7 @@ class Car:
         self.enter = 0  # 0 if entering intesection -- 1 if in middle --- 2 if exiting
         self.enterTime0 = enterTime
         self.expectedTime0 = time.time() + expect(-100, self.speed, self.accel0)  # not really used
+        self.expectedTime00 = time.time() + expect(-105, self.speed, self.accel0)  # not really used
         self.lane = lane
         self.posY = 0
         self.posX = 0
@@ -92,7 +95,6 @@ class Car:
         # position
         # Assume:  -100:100 X -100:100
         if self.lane == 1:
-            print "one"
             self.posX_OG = 2.5
             self.posY_OG = -100
         elif self.lane == 2:
@@ -123,30 +125,6 @@ class Car:
         path = self.piec0XY(T)
         return path
 
-    def piec0X(self, T):
-        # add in car data
-        path = self.vin
-        path = np.append(path, self.lane)
-
-        # timelines
-        time = np.linspace(T, T + self.max_time, self.resolution)
-        realTime = np.linspace(0, T + self.max_time - self.enterTime0, self.resolution)
-
-        # place holders
-        count = 0
-        delta = 0
-
-        for inx, val in enumerate(time):
-            if (val < self.enterTime0) and (self.lane % 2 == 1): # car not started yet
-                delta = 0
-                count = count + 1
-            else:  #TODO: you are going to put turning shit in here
-                delta = self.trajectory01(realTime[inx - count], 0)
-                if self.lane == 2:
-                    delta = delta * -1
-            self.posX = self.posX + delta
-            path = np.append(path, self.posX)
-        return path
 
     def piec0XY(self, T):
         # add in car data
@@ -191,31 +169,7 @@ class Car:
 
         return path
 
-    def piec0Y(self, T):
-        # add in car data
-        path = self.vin
-        path = np.append(path, self.lane)
 
-        # timelines
-        time = np.linspace(T, T + self.max_time, self.resolution)
-        realTime = np.linspace(0, T + self.max_time - self.enterTime0, self.resolution)
-
-        # place holders
-        count = 0
-        delta = 0
-
-        for inx, val in enumerate(time):
-            if (val < self.enterTime0) or (self.lane % 2 == 0):
-                delta = 0
-                count = count + 1
-            else:
-                delta = self.trajectory01(realTime[inx - count], 0)
-                if self.lane == 3:
-                    delta = delta * -1
-            self.posY = self.posY + delta
-            path = np.append(path, self.posY)
-
-        return path
 
     def trajectory0(self, time, pos):
         return pos + (self.speed * time) + (0.5 * self.accel0 * (time ** 2))
