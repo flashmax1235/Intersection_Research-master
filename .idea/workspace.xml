@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e642bdc-0a9b-4c04-9e80-21a41da68513" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Intersection_Research-master.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Intersection_Research-master.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Intersection_Manager_class_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Intersection_Class.py" beforeDir="false" afterPath="$PROJECT_DIR$/Intersection_Class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/carData.csv" beforeDir="false" afterPath="$PROJECT_DIR$/carData.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp2_lol.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp2_lol.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,12 +13,141 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/Intersection_Manager_class.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="525">
+                    <caret line="86" column="49" selection-start-line="86" selection-start-column="49" selection-end-line="86" selection-end-column="125" />
+                    <folding>
+                      <element signature="e#0#31#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/Intersection_Class.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="612">
+                    <caret line="481" selection-start-line="481" selection-end-line="481" />
+                    <folding>
+                      <element signature="e#868#1446#0" />
+                      <element signature="e#1885#2146#0" />
+                      <element signature="e#2189#2747#0" />
+                      <element signature="e#2791#3351#0" />
+                      <element signature="e#3397#3925#0" />
+                      <element signature="e#3437#3501#0" />
+                      <element signature="e#4001#5041#0" />
+                      <element signature="e#4229#5041#0" />
+                      <element signature="e#4320#4461#0" />
+                      <element signature="e#4496#5003#0" />
+                      <element signature="e#5087#5981#0" />
+                      <element signature="e#5169#5981#0" />
+                      <element signature="e#5260#5401#0" />
+                      <element signature="e#5436#5943#0" />
+                      <element signature="e#6027#11549#0" />
+                      <element signature="e#6109#7018#0" />
+                      <element signature="e#6205#6390#0" />
+                      <element signature="e#6425#6980#0" />
+                      <element signature="e#6662#6799#0" />
+                      <element signature="e#6842#6980#0" />
+                      <element signature="e#7045#11497#0" />
+                      <element signature="e#7341#9407#0" />
+                      <element signature="e#7903#8190#0" />
+                      <element signature="e#7903#7947#0" />
+                      <element signature="e#8321#8612#0" />
+                      <element signature="e#8321#8365#0" />
+                      <element signature="e#8685#8976#0" />
+                      <element signature="e#8685#8729#0" />
+                      <element signature="e#9049#9335#0" />
+                      <element signature="e#9049#9093#0" />
+                      <element signature="e#9500#9927#0" />
+                      <element signature="e#9962#11497#0" />
+                      <element signature="e#10245#10361#0" />
+                      <element signature="e#10518#10575#0" />
+                      <element signature="e#10811#11395#0" />
+                      <element signature="e#10811#10855#0" />
+                      <element signature="e#11061#11331#1" />
+                      <element signature="e#11438#11497#0" />
+                      <element signature="e#11591#11709#0" />
+                      <element signature="e#11620#11709#1" />
+                      <element signature="e#11825#12060#0" />
+                      <element signature="e#12177#12414#0" />
+                      <element signature="e#12421#12462#0" />
+                      <element signature="e#12645#13219#0" />
+                      <element signature="e#12969#13036#0" />
+                      <element signature="e#13106#13174#0" />
+                      <element signature="e#13225#13266#0" />
+                      <element signature="e#13451#14026#0" />
+                      <element signature="e#13777#13844#0" />
+                      <element signature="e#13914#13981#0" />
+                      <element signature="e#14035#14080#0" />
+                      <element signature="e#14200#14867#0" />
+                      <element signature="e#14612#14681#0" />
+                      <element signature="e#14753#14821#0" />
+                      <element signature="e#14873#14918#0" />
+                      <element signature="e#15040#15708#0" />
+                      <element signature="e#15454#15522#0" />
+                      <element signature="e#15594#15662#0" />
+                      <element signature="e#15726#15771#0" />
+                      <element signature="e#15752#16303#0" />
+                      <element signature="e#15849#16234#0" />
+                      <element signature="e#16000#16204#0" />
+                      <element signature="e#16261#16303#0" />
+                      <element signature="e#16309#16401#0" />
+                      <element signature="e#16477#17449#0" />
+                      <element signature="e#17456#17548#0" />
+                      <element signature="e#17625#18599#0" />
+                      <element signature="e#17625#17657#0" />
+                      <element signature="e#17731#17780#0" />
+                      <element signature="e#18349#18466#0" />
+                      <element signature="e#18349#18395#0" />
+                      <element signature="e#18607#18651#0" />
+                      <element signature="e#19478#20410#0" />
+                      <element signature="e#19583#19634#0" />
+                      <element signature="e#19644#19671#0" />
+                      <element signature="e#19810#19861#0" />
+                      <element signature="e#19991#20358#0" />
+                      <element signature="e#20136#20312#0" />
+                      <element signature="e#20220#20312#0" />
+                      <element signature="e#20416#20497#0" />
+                      <element signature="e#20578#21008#0" />
+                      <element signature="e#20672#20988#0" />
+                      <element signature="e#21014#21105#0" />
+                      <element signature="e#21190#21637#0" />
+                      <element signature="e#21287#21617#0" />
+                      <element signature="e#21645#21736#0" />
+                      <element signature="e#21823#22204#0" />
+                      <element signature="e#21917#22176#0" />
+                      <element signature="e#22978#23336#0" />
+                      <element signature="e#23049#23308#0" />
+                      <element signature="e#23342#23435#0" />
+                      <element signature="e#23594#23872#0" />
+                      <element signature="e#23715#23842#0" />
+                      <element signature="e#23922#24201#0" />
+                      <element signature="e#24044#24171#0" />
+                      <element signature="e#24262#24399#0" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Car_Class.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-540">
+            <state relative-caret-position="-570">
               <caret line="39" column="9" selection-start-line="39" selection-start-column="9" selection-end-line="45" selection-end-column="33" />
               <folding>
                 <element signature="e#526#537#0" expanded="true" />
@@ -30,22 +157,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Intersection_Manager_class.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1110">
-              <caret line="77" selection-start-line="77" selection-end-line="77" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/temp2_lol.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="51" column="136" selection-start-line="51" selection-start-column="136" selection-end-line="51" selection-end-column="136" />
+            <state>
+              <caret line="19" selection-start-line="19" selection-end-line="19" />
               <folding>
                 <element signature="e#219#252#0" />
                 <element signature="e#508#865#0" />
@@ -60,58 +175,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Intersection_Class.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Intersection_Manager_class_2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2174">
-              <caret line="487" column="9" selection-start-line="487" selection-start-column="9" selection-end-line="487" selection-end-column="9" />
+            <state relative-caret-position="280">
+              <caret line="91" column="91" selection-start-line="91" selection-start-column="91" selection-end-line="91" selection-end-column="91" />
               <folding>
-                <element signature="e#399#1446#0" />
-                <element signature="e#427#798#0" />
-                <element signature="e#868#1446#0" />
-                <element signature="e#1885#2146#0" />
-                <element signature="e#2189#2747#0" />
-                <element signature="e#2229#2293#0" />
-                <element signature="e#2320#2747#0" />
-                <element signature="e#2467#2614#0" />
-                <element signature="e#2662#2747#0" />
-                <element signature="e#2791#3351#0" />
-                <element signature="e#2831#2895#0" />
-                <element signature="e#2922#3351#0" />
-                <element signature="e#3069#3218#0" />
-                <element signature="e#3266#3351#0" />
-                <element signature="e#3397#3925#0" />
-                <element signature="e#3437#3501#0" />
-                <element signature="e#3528#3925#0" />
-                <element signature="e#3675#3792#0" />
-                <element signature="e#3840#3925#0" />
-                <element signature="e#4001#5041#0" />
-                <element signature="e#4229#5041#0" />
-                <element signature="e#4320#4461#0" />
-                <element signature="e#4496#5003#0" />
-                <element signature="e#5087#5981#0" />
-                <element signature="e#5169#5981#0" />
-                <element signature="e#5260#5401#0" />
-                <element signature="e#5436#5943#0" />
-                <element signature="e#6109#7018#0" />
-                <element signature="e#6205#6390#0" />
-                <element signature="e#6425#6980#0" />
-                <element signature="e#6662#6799#0" />
-                <element signature="e#6842#6980#0" />
-                <element signature="e#7895#8182#0" />
-                <element signature="e#7895#7939#0" />
-                <element signature="e#8313#8604#0" />
-                <element signature="e#8313#8357#0" />
-                <element signature="e#8677#8968#0" />
-                <element signature="e#8677#8721#0" />
-                <element signature="e#9041#9327#0" />
-                <element signature="e#9041#9085#0" />
-                <element signature="e#10496#10553#0" />
-                <element signature="e#10789#11373#0" />
-                <element signature="e#10789#10833#0" />
-                <element signature="e#11039#11309#1" />
-                <element signature="e#11416#11475#0" />
+                <element signature="e#0#31#0" expanded="true" />
+                <element signature="e#1559#2444#0" />
+                <element signature="e#9456#10552#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/s">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="82" selection-start-line="7" selection-start-column="82" selection-end-line="7" selection-end-column="82" />
             </state>
           </provider>
         </entry>
@@ -143,6 +225,8 @@
       <find>expectedTime</find>
       <find>newNode.set</find>
       <find>shit n</find>
+      <find>find_open_right_al</find>
+      <find>check_avalability_time</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -156,8 +240,10 @@
         <option value="$PROJECT_DIR$/Simulation.py" />
         <option value="$PROJECT_DIR$/Intersection_Manager_class.py" />
         <option value="$PROJECT_DIR$/temp_lol.py" />
-        <option value="$PROJECT_DIR$/Intersection_Class.py" />
         <option value="$PROJECT_DIR$/temp2_lol.py" />
+        <option value="$PROJECT_DIR$/s" />
+        <option value="$PROJECT_DIR$/Intersection_Manager_class_2.py" />
+        <option value="$PROJECT_DIR$/Intersection_Class.py" />
       </list>
     </option>
   </component>
@@ -174,7 +260,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/temp2_lol.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Intersection_Manager_class_2.py" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -190,7 +276,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.temp2_lol">
+  <component name="RunManager" selected="Python.Intersection_Manager_class_2">
     <configuration name="ForThinkPAd" type="PythonConfigurationType" factoryName="Python">
       <module name="Intersection_Research-master" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -225,6 +311,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Intersection_Manager_class.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Intersection_Manager_class_2" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Intersection_Research-master" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Intersection_Manager_class_2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -279,6 +386,7 @@
       <item itemvalue="Python.ForThinkPAd" />
       <item itemvalue="Python.Intersection_Manager_class" />
       <item itemvalue="Python.temp2_lol" />
+      <item itemvalue="Python.Intersection_Manager_class_2" />
       <item itemvalue="Python.Simulation" />
     </list>
   </component>
@@ -304,15 +412,15 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3449001" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.5095986" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.37118822" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.50893795" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32912722" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32984293" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32984293" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.21871714" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -320,6 +428,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Intersection_Manager_class_2.py</url>
+          <line>84</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -341,16 +456,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/temp_lol.py" />
-    <entry file="file://$PROJECT_DIR$/Intersection_Manager_class.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1110">
-          <caret line="77" selection-start-line="77" selection-end-line="77" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Simulation.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -361,74 +466,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Car_Class.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-540">
-          <caret line="39" column="9" selection-start-line="39" selection-start-column="9" selection-end-line="45" selection-end-column="33" />
-          <folding>
-            <element signature="e#526#537#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Intersection_Class.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2174">
-          <caret line="487" column="9" selection-start-line="487" selection-start-column="9" selection-end-line="487" selection-end-column="9" />
-          <folding>
-            <element signature="e#399#1446#0" />
-            <element signature="e#427#798#0" />
-            <element signature="e#868#1446#0" />
-            <element signature="e#1885#2146#0" />
-            <element signature="e#2189#2747#0" />
-            <element signature="e#2229#2293#0" />
-            <element signature="e#2320#2747#0" />
-            <element signature="e#2467#2614#0" />
-            <element signature="e#2662#2747#0" />
-            <element signature="e#2791#3351#0" />
-            <element signature="e#2831#2895#0" />
-            <element signature="e#2922#3351#0" />
-            <element signature="e#3069#3218#0" />
-            <element signature="e#3266#3351#0" />
-            <element signature="e#3397#3925#0" />
-            <element signature="e#3437#3501#0" />
-            <element signature="e#3528#3925#0" />
-            <element signature="e#3675#3792#0" />
-            <element signature="e#3840#3925#0" />
-            <element signature="e#4001#5041#0" />
-            <element signature="e#4229#5041#0" />
-            <element signature="e#4320#4461#0" />
-            <element signature="e#4496#5003#0" />
-            <element signature="e#5087#5981#0" />
-            <element signature="e#5169#5981#0" />
-            <element signature="e#5260#5401#0" />
-            <element signature="e#5436#5943#0" />
-            <element signature="e#6109#7018#0" />
-            <element signature="e#6205#6390#0" />
-            <element signature="e#6425#6980#0" />
-            <element signature="e#6662#6799#0" />
-            <element signature="e#6842#6980#0" />
-            <element signature="e#7895#8182#0" />
-            <element signature="e#7895#7939#0" />
-            <element signature="e#8313#8604#0" />
-            <element signature="e#8313#8357#0" />
-            <element signature="e#8677#8968#0" />
-            <element signature="e#8677#8721#0" />
-            <element signature="e#9041#9327#0" />
-            <element signature="e#9041#9085#0" />
-            <element signature="e#10496#10553#0" />
-            <element signature="e#10789#11373#0" />
-            <element signature="e#10789#10833#0" />
-            <element signature="e#11039#11309#1" />
-            <element signature="e#11416#11475#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/temp2_lol.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="51" column="136" selection-start-line="51" selection-start-column="136" selection-end-line="51" selection-end-column="136" />
+        <state>
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
           <folding>
             <element signature="e#219#252#0" />
             <element signature="e#508#865#0" />
@@ -438,6 +479,150 @@
             <element signature="e#5999#6980#0" />
             <element signature="e#7118#8099#0" />
             <element signature="e#8188#9163#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Car_Class.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-570">
+          <caret line="39" column="9" selection-start-line="39" selection-start-column="9" selection-end-line="45" selection-end-column="33" />
+          <folding>
+            <element signature="e#526#537#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Intersection_Manager_class.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="86" column="49" selection-start-line="86" selection-start-column="49" selection-end-line="86" selection-end-column="125" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/s">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="82" selection-start-line="7" selection-start-column="82" selection-end-line="7" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Intersection_Class.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="481" selection-start-line="481" selection-end-line="481" />
+          <folding>
+            <element signature="e#868#1446#0" />
+            <element signature="e#1885#2146#0" />
+            <element signature="e#2189#2747#0" />
+            <element signature="e#2791#3351#0" />
+            <element signature="e#3397#3925#0" />
+            <element signature="e#3437#3501#0" />
+            <element signature="e#4001#5041#0" />
+            <element signature="e#4229#5041#0" />
+            <element signature="e#4320#4461#0" />
+            <element signature="e#4496#5003#0" />
+            <element signature="e#5087#5981#0" />
+            <element signature="e#5169#5981#0" />
+            <element signature="e#5260#5401#0" />
+            <element signature="e#5436#5943#0" />
+            <element signature="e#6027#11549#0" />
+            <element signature="e#6109#7018#0" />
+            <element signature="e#6205#6390#0" />
+            <element signature="e#6425#6980#0" />
+            <element signature="e#6662#6799#0" />
+            <element signature="e#6842#6980#0" />
+            <element signature="e#7045#11497#0" />
+            <element signature="e#7341#9407#0" />
+            <element signature="e#7903#8190#0" />
+            <element signature="e#7903#7947#0" />
+            <element signature="e#8321#8612#0" />
+            <element signature="e#8321#8365#0" />
+            <element signature="e#8685#8976#0" />
+            <element signature="e#8685#8729#0" />
+            <element signature="e#9049#9335#0" />
+            <element signature="e#9049#9093#0" />
+            <element signature="e#9500#9927#0" />
+            <element signature="e#9962#11497#0" />
+            <element signature="e#10245#10361#0" />
+            <element signature="e#10518#10575#0" />
+            <element signature="e#10811#11395#0" />
+            <element signature="e#10811#10855#0" />
+            <element signature="e#11061#11331#1" />
+            <element signature="e#11438#11497#0" />
+            <element signature="e#11591#11709#0" />
+            <element signature="e#11620#11709#1" />
+            <element signature="e#11825#12060#0" />
+            <element signature="e#12177#12414#0" />
+            <element signature="e#12421#12462#0" />
+            <element signature="e#12645#13219#0" />
+            <element signature="e#12969#13036#0" />
+            <element signature="e#13106#13174#0" />
+            <element signature="e#13225#13266#0" />
+            <element signature="e#13451#14026#0" />
+            <element signature="e#13777#13844#0" />
+            <element signature="e#13914#13981#0" />
+            <element signature="e#14035#14080#0" />
+            <element signature="e#14200#14867#0" />
+            <element signature="e#14612#14681#0" />
+            <element signature="e#14753#14821#0" />
+            <element signature="e#14873#14918#0" />
+            <element signature="e#15040#15708#0" />
+            <element signature="e#15454#15522#0" />
+            <element signature="e#15594#15662#0" />
+            <element signature="e#15726#15771#0" />
+            <element signature="e#15752#16303#0" />
+            <element signature="e#15849#16234#0" />
+            <element signature="e#16000#16204#0" />
+            <element signature="e#16261#16303#0" />
+            <element signature="e#16309#16401#0" />
+            <element signature="e#16477#17449#0" />
+            <element signature="e#17456#17548#0" />
+            <element signature="e#17625#18599#0" />
+            <element signature="e#17625#17657#0" />
+            <element signature="e#17731#17780#0" />
+            <element signature="e#18349#18466#0" />
+            <element signature="e#18349#18395#0" />
+            <element signature="e#18607#18651#0" />
+            <element signature="e#19478#20410#0" />
+            <element signature="e#19583#19634#0" />
+            <element signature="e#19644#19671#0" />
+            <element signature="e#19810#19861#0" />
+            <element signature="e#19991#20358#0" />
+            <element signature="e#20136#20312#0" />
+            <element signature="e#20220#20312#0" />
+            <element signature="e#20416#20497#0" />
+            <element signature="e#20578#21008#0" />
+            <element signature="e#20672#20988#0" />
+            <element signature="e#21014#21105#0" />
+            <element signature="e#21190#21637#0" />
+            <element signature="e#21287#21617#0" />
+            <element signature="e#21645#21736#0" />
+            <element signature="e#21823#22204#0" />
+            <element signature="e#21917#22176#0" />
+            <element signature="e#22978#23336#0" />
+            <element signature="e#23049#23308#0" />
+            <element signature="e#23342#23435#0" />
+            <element signature="e#23594#23872#0" />
+            <element signature="e#23715#23842#0" />
+            <element signature="e#23922#24201#0" />
+            <element signature="e#24044#24171#0" />
+            <element signature="e#24262#24399#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Intersection_Manager_class_2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="91" column="91" selection-start-line="91" selection-start-column="91" selection-end-line="91" selection-end-column="91" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#1559#2444#0" />
+            <element signature="e#9456#10552#0" />
           </folding>
         </state>
       </provider>

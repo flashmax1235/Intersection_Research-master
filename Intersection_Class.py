@@ -367,6 +367,20 @@ class Intersection:
         else:
             return False, right
 
+    # returns tue/false,acceleration value for p1
+    # takes a time to be at
+    # Todo: incorperate current acceleratiuon value!! you fool
+    def withinCriteriaRightTimeBsed(self, res, T):
+        optionTime = (T + self.inter_tolerance_time) - res.enterTime
+        right = (2 * (self.inter_side_length - (self.inter_size / 2) - res.speed * optionTime)) / (optionTime ** 2)
+        if (right < 0) and (right > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
+            print ("right deceleration approved!")
+            return True, right
+        elif (right > 0) and (right < self.car_max_accel):
+            print("right acceleration approved!")
+            return True, right
+        else:
+            return False, right
 
 
 
@@ -450,18 +464,23 @@ class Intersection:
     # does not need to check for line cutting, ONLY USE WHEN CHECKING SPECIFIC TIMES, NOT FOR INITIAL USE
     # returns T/F and left node of opening
     def check_avalability_time(self,T):
-        current_node = self.head.nextt
+        current_node = self.head
         if(current_node == self.tail): #list is empty, must be true
             return True, self.head
 
 
         while (current_node.vin != 99):
             if (abs(current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time):  # (1) enough space  lane
-                if(T-current_node.expectedTime > self.inter_tolerance_time):
-                    return True,current_node  # returns right node x---(x)
+                if(current_node.expectedTime - T >= self.inter_tolerance_time):
+                    return True, current_node  # returns right node (x)---x
 
             current_node = current_node.nextt
-        return False, None
+
+        #check if greater than tail.prev by tolerance
+        if T -current_node.prev.expectedTime >= self.inter_tolerance_time:
+            return True,current_node
+
+        return False, current_node
 
 
     def check_P2_Avalibility(self, T):
@@ -532,12 +551,26 @@ class Intersection:
     # returns head. if nothing found
     def find_open_right(self, res):
         current_node = self.find_closest(res)
-
         while (current_node.vin != 99):
-            if abs(
-                    current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time:  # (1) enough space  lane
+            if abs(current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time:  # (1) enough space  lane
+                #print (current_node.toString())
                 return current_node  # returns right node x---(x)
             current_node = current_node.nextt
+        #print (current_node.toString())
+        return current_node
+
+
+    def find_open_right_newSpot(self, res, notThisNode):
+        # find opening with greater expected time than res
+        # if opening
+        current_node = self.find_closest(res)
+
+        while (current_node.vin != 99):
+            if abs(current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time and (current_node.nextt.vin != notThisNode.vin):  # (1) enough space  lane
+                #print (current_node.toString())
+                return current_node  # returns right node x---(x)
+            current_node = current_node.nextt
+
         return current_node
 
     # starts search from look_right_initial
