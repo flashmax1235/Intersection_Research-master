@@ -49,6 +49,8 @@ class Intersection_Manager:
         can_left = [0, 0]
         left = 0
         right = 0
+        pastLeft = None # both used as place holders to allow while leftFit/rightFit to explore new options if first search did not work
+        pastRight = None
 
         newNode = res
         if newNode.lane == 1:
@@ -57,12 +59,12 @@ class Intersection_Manager:
             while(newNode.set != 1): #continue looking until reservation is set and safe
 
                 if quads[0].check_avalability_initial(newNode): #availble in q1?
-                    print ("q1 open")
+                    print ("P1 open")
 
                     #check to see if q2 is open
                     q2_status = quads[1].check_P2_Avalibility(newNode.expectedTime2)
                     if q2_status[0]: #availble in q2?
-                        print ("q2 open")
+                        print ("P2 open")
                        # insert reservation
 
                         # insert generic reservation, only expected time
@@ -79,7 +81,7 @@ class Intersection_Manager:
                         quads[0].insertBetween(q1_status[1], q1_status[1].nextt, newNode)
                         newNode.set = 1
                     else:                                      #not available in q2, find open time in q2
-                        print ("q2 not open")
+                        print ("P2 not open")
                         while not (left_fit[0] or right_fit[0]):
                             print("neither option work for P1, find a greater changing option in P2")
                             # calculate accel and abilties value needed
@@ -192,7 +194,7 @@ class Intersection_Manager:
                     print("P1 does not fit")
                     # find opening to right of newNode
                     cursor = quads[0].find_open_right(newNode)  #TODO: should also look for open left *lane matters*
-                    print(cursor)
+                    print(cursor.toString())
 
 
                     #check if opening to the rights fits car criteria
@@ -204,12 +206,12 @@ class Intersection_Manager:
                         newNode.expectedTime = cursor.expectedTime + self.inter_tolerance_time
                         newNode.requestedAccel = abilityToTheRight[1]
                         newNode.accel = newNode.requestedAccel
-                        newNode.expectedTime2 = IC.expect(self.inter_side_length,newNode.speed,abilityToTheRight[1]) + newNode.enterTime
-                        print("done up[dating new aption")
+                        newNode.expectedTime2 = IC.expect(self.inter_side_length - (self.inter_size/2), newNode.speed, abilityToTheRight[1]) + newNode.enterTime
+                        print("done uppdating new aption")
                         print(newNode.toString())
                     #newNode.set = 1
         elif newNode.lane == 2:
-            quads[1].insertBetween(quads[1].head,quads[1].tail,newNode)
+            quads[1].insertBetween(quads[1].head, quads[1].tail, newNode)
         else:
             print("unknown lane")
         return  newNode.requestedAccel, newNode.expectedTime
@@ -234,7 +236,7 @@ tempRes = IC.Reservation(test_car.vin, test_car.speed, test_car.accel0, test_car
 print("These are res to consider")
 print(tempRes.toString())
 #fake fill for P1
-fakeRes = IC.Reservation(69,10,0,T.time(),2)
+fakeRes = IC.Reservation(89,10,0,T.time(),2)
 fakeRes.expectedTime= tempRes.expectedTime
 manager.q1.insertBetween(manager.q1.head,manager.q1.tail,fakeRes)
 
@@ -243,7 +245,7 @@ print(fakeRes.toString())
 
 #fake fill for P2
 fakeRes = IC.Reservation(79,10,0,T.time(),2)
-fakeRes.expectedTime= tempRes.expectedTime2 - .7
+fakeRes.expectedTime= tempRes.expectedTime2 - 1
 manager.q2.insertBetween(manager.q2.head,manager.q2.tail,fakeRes)
 
 print(fakeRes.toString())
@@ -252,14 +254,14 @@ print("\n\nAdding to Manager\n")
 
 # attempt to add real reservation
 test_car.updateAccel01(manager.addReservation(tempRes))
-
+"""
 list_car_data.append(test_car.distanceTravelled(quads[0].starTime))
 
 with open('carData.csv', 'wb') as csvFile:
     writer = csv.writer(csvFile)
     writer.writerows(list_car_data)
 csvFile.close()
-
+"""
 
 
 print("\n\nLists \n")

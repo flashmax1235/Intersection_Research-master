@@ -192,16 +192,16 @@ class Intersection:
                     # print "add before closest"
             self.size = self.size = 1
         else:
-            print "Expected time does not fit, finding new location for: " + str(res.toString())
+            print ("Expected time does not fit, finding new location for: " + str(res.toString()))
             cursor = self.look_right_initial(res)  # makes sure nothing in same LANE is expected after res expectedTime
             if (cursor == None):  # nothing to worry about on the right
 
-                print "no issues regarding lane to the right \n\n"
+                print ("no issues regarding lane to the right \n\n")
 
-                print "looking to the left"
+                print ("looking to the left")
                 left = self.find_open_left(res)
                 can_left = self.withinCriteriaLeft(res, left)
-                print "looking to the right"
+                print ("looking to the right")
                 right = self.find_open_right(res)
                 can_right = self.withinCriteriaRight(res, right)
 
@@ -235,7 +235,7 @@ class Intersection:
                 else:
                     print("shit nothing fits...")
             elif (cursor == self.tail.prev):  # if last enetry is same lane
-                print "same lane at end of list"
+                print ("same lane at end of list")
                 # reservation must be at end of the list
                 res.expectedTime = self.tail.prev.expectedTime + self.inter_tolerance_time  # expected for proposed??
                 # within criteria?
@@ -243,18 +243,18 @@ class Intersection:
                 res.requestedAccel = can_right[1]
                 self.insertBetween(self.tail.prev, self.tail, res)
             else:
-                print "issues regarding lane to the right \n\n"
-                print "looking to the right"
+                print ("issues regarding lane to the right \n\n")
+                print ("looking to the right")
                 right = self.find_open_right_fromPos(res, cursor)
                 can_right = self.withinCriteriaRight(res, right)
 
                 if right != None:
-                    print "Option on right: " + str(right.toString())
-                    print "Option possible? " + str(can_right)
+                    print ("Option on right: " + str(right.toString()))
+                    print ("Option possible? " + str(can_right))
                 else:
-                    print "Option on right: none"
+                    print ("Option on right: none")
 
-                print "\n\nchecking if within car criteria:.."
+                print ("\n\nchecking if within car criteria:..")
                 # print "left: " + str(self.withinCriteriaLeft(res,left))
                 # print "right: " + str(self.withinCriteriaRight(res,right))
 
@@ -307,10 +307,10 @@ class Intersection:
         left = (2 * (self.inter_side_length - (self.inter_size/2) - res.speed * opt1_time)) / (opt1_time ** 2)
 
         if (left < 0) and (left > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
-            print "left deceleration approved!"
+            print ("left deceleration approved!")
             return True, left
         elif (left > 0) and (left < self.car_max_accel):
-            print  "left acceleration approved!"
+            print  ("left acceleration approved!")
             return True, left
         else:
             return False, left
@@ -322,12 +322,10 @@ class Intersection:
         left = (2 * (self.inter_side_length + (self.inter_size / 2) - res.speed * opt1_time)) / (opt1_time ** 2)
 
         if (left < 0) and (left > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
-            print
-            "left deceleration approved!"
+            print ("left deceleration approved!")
             return True, left
         elif (left > 0) and (left < self.car_max_accel):
-            print
-            "left acceleration approved!"
+            print ("left acceleration approved!")
             return True, left
         else:
             return False, left
@@ -383,7 +381,7 @@ class Intersection:
             while current_node.nextt != None:
                 # Add current node to list and traverse forward
                 value_list.append(current_node.toString())
-                print current_node.toString()
+                print (current_node.toString())
                 current_node = current_node.nextt
             # rint value_list
         else:
@@ -470,13 +468,13 @@ class Intersection:
         current_node = self.head
         # list is empty
         if current_node.nextt == self.tail:
-            print("case 1")
+            #print("case 1")
             return True, self.head
 
         # time is before first node
         #if current_node.nextt.expectedTime > T:
         if current_node.nextt.expectedTime - T >= self.inter_tolerance_time:
-            print("case 2")
+            #print("case 2")
             return True, self.head
 
         # traverse to an opening
@@ -484,10 +482,10 @@ class Intersection:
         while current_node != self.tail:
             if (abs(current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time):  # (1) enough space  lane
                 if (T - current_node.expectedTime > self.inter_tolerance_time):
-                    print("case 3")
+                    #print("case 3")
                     return True, current_node  # returns right node x---(x)
             current_node = current_node.nextt
-        print("case 4")
+        #print("case 4")
         return False, None
 
     # find open space to left: (1) size greater than tolerance*2 (2) no line skipping
