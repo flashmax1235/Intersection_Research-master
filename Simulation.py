@@ -4,7 +4,7 @@ import time
 import random
 import Encode as E
 import csv
-import Tkinter as tk
+
 
 # start intersection
 intersection = IC.Intersection("test")

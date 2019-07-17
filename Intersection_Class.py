@@ -280,15 +280,6 @@ class Intersection:
                     exit()
         return res.requestedAccel, res.expectedTime
 
-
-
-
-
-
-
-
-
-
     def find_best_option(self):
         print("neither lol")
         """
@@ -309,11 +300,11 @@ class Intersection:
         return eng1, eng2
 
 
-    # returns tue/false,acceleration value
+    # returns tue/false,acceleration value p1
     # Todo: incorperate current acceleratiuon value!! you fool!!!!!!!!!!!!!
     def withinCriteriaLeft(self, res, option):  # option1 is left search, option2 is right search
         opt1_time = (option.expectedTime - self.inter_tolerance_time) - option.enterTime
-        left = (2 * (self.inter_side_length - res.speed * opt1_time)) / (opt1_time ** 2)
+        left = (2 * (self.inter_side_length - (self.inter_size/2) - res.speed * opt1_time)) / (opt1_time ** 2)
 
         if (left < 0) and (left > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
             print "left deceleration approved!"
@@ -324,21 +315,64 @@ class Intersection:
         else:
             return False, left
 
-    # returns tue/false,acceleration value
+    # returns tue/false,acceleration value p2
+    # Todo: incorperate current acceleratiuon value!! you fool!!!!!!!!!!!!!
+    def withinCriteriaLeftp2(self, res, option):  # option1 is left search, option2 is right search
+        opt1_time = (option.expectedTime - self.inter_tolerance_time) - option.enterTime
+        left = (2 * (self.inter_side_length + (self.inter_size / 2) - res.speed * opt1_time)) / (opt1_time ** 2)
+
+        if (left < 0) and (left > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
+            print
+            "left deceleration approved!"
+            return True, left
+        elif (left > 0) and (left < self.car_max_accel):
+            print
+            "left acceleration approved!"
+            return True, left
+        else:
+            return False, left
+
+
+
+
+    # returns tue/false,acceleration value for p1
     # Todo: incorperate current acceleratiuon value!! you fool
     def withinCriteriaRight(self, res, option):
         optionTime = (option.expectedTime + self.inter_tolerance_time) - option.enterTime
-        right = (2 * (self.inter_side_length - res.speed * optionTime)) / (optionTime ** 2)
+        right = (2 * (self.inter_side_length - (self.inter_size/2) - res.speed * optionTime)) / (optionTime ** 2)
+        print(optionTime + option.enterTime)
+        print(right)
         if (right < 0) and (
                 right > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
-            print "right deceleration approved!"
+            print ("right deceleration approved!")
             return True, right
         elif (right > 0) and (right < self.car_max_accel):
-            print
-            "right acceleration approved!"
+            print("right acceleration approved!")
             return True, right
         else:
             return False, right
+
+    # returns tue/false,acceleration value for p2
+    # Todo: incorperate current acceleratiuon value!! you fool
+    def withinCriteriaRightp2(self, res, option):
+        optionTime = (option.expectedTime + self.inter_tolerance_time) - option.enterTime
+        right = (2 * (self.inter_side_length + (self.inter_size / 2) - res.speed * optionTime)) / (optionTime ** 2)
+        print(optionTime + option.enterTime)
+        print(right)
+        if (right < 0) and (
+                right > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
+            print("right deceleration approved!")
+            return True, right
+        elif (right > 0) and (right < self.car_max_accel):
+            print("right acceleration approved!")
+            return True, right
+        else:
+            return False, right
+
+
+
+
+
 
     def print_as_list(self):
         # Create empty list
@@ -432,7 +466,29 @@ class Intersection:
         return False, None
 
 
+    def check_P2_Avalibility(self, T):
+        current_node = self.head
+        # list is empty
+        if current_node.nextt == self.tail:
+            print("case 1")
+            return True, self.head
 
+        # time is before first node
+        #if current_node.nextt.expectedTime > T:
+        if current_node.nextt.expectedTime - T >= self.inter_tolerance_time:
+            print("case 2")
+            return True, self.head
+
+        # traverse to an opening
+        current_node = current_node.nextt
+        while current_node != self.tail:
+            if (abs(current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time):  # (1) enough space  lane
+                if (T - current_node.expectedTime > self.inter_tolerance_time):
+                    print("case 3")
+                    return True, current_node  # returns right node x---(x)
+            current_node = current_node.nextt
+        print("case 4")
+        return False, None
 
     # find open space to left: (1) size greater than tolerance*2 (2) no line skipping
     # returns head. if nothing found
