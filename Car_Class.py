@@ -12,9 +12,6 @@ Things to store:
     (2) requested_in trajectory
     (3) requested_out trajectory
 
-Things I don't know:
-    (1) where do i store intersection data? some needs to be sent to car
-
 
 """
 
@@ -48,6 +45,9 @@ class Car:
     inter_max_speed = IC.Intersection.inter_max_speed  # TODO actually use this....
     inter_tolerance_time = IC.Intersection.inter_tolerance_time  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
     inter_size = IC.Intersection.inter_size # ex: 10x10m inside
+    p1_distance = -1 * inter_side_length - (inter_size / 2)
+    p2_distance = -1 * inter_side_length + (inter_size / 2)
+
 
     # position
     posX = 0
@@ -57,6 +57,7 @@ class Car:
     accel0 = 0  # original acceleration value
     accel01 = 0  # first requested acceleration value
     accel1 = 0  # outgoing requested acceleration value
+    turn = None  # 0: no turn  --- 1: right turn  --- 2: left turn 9: super FUN turn
 
     # Timeline
     enterTime0 = 0  # time entering intersection
@@ -75,18 +76,18 @@ class Car:
 
 
 
-    def __init__(self, VIN, speed, accel, enterTime, lane):
+    def __init__(self, VIN, speed, accel, enterTime, lane, turn):
         self.vin = VIN
         self.speed = speed
         self.accel0 = accel
         self.enter = 0  # 0 if entering intesection -- 1 if in middle --- 2 if exiting
         self.enterTime0 = enterTime
-        self.expectedTime0 = time.time() + expect(-100, self.speed, self.accel0)  # not really used
-        self.expectedTime00 = time.time() + expect(-105, self.speed, self.accel0)  # not really used
+        self.expectedTime0 = time.time() + expect(self.p1_distance, self.speed, self.accel0)  # not really used
+        self.expectedTime00 = time.time() + expect(self.p2_distance, self.speed, self.accel0)  # not really used
         self.lane = lane
         self.posY = 0
         self.posX = 0
-
+        self.turn = turn
         self.posX_OG = 0
         self.posY_OG = 0
 
@@ -95,24 +96,29 @@ class Car:
         # position
         # Assume:  -100:100 X -100:100
         if self.lane == 1:
-            self.posX_OG = 2.5
+            self.posX_OG = 5
             self.posY_OG = -100
         elif self.lane == 2:
             self.posX_OG = 100
-            self.posY_OG = 2.5
+            self.posY_OG = 5
         elif self.lane == 3:
-            self.posX_OG = -2.5
+            self.posX_OG = -5
             self.posY_OG = 100
         elif self.lane == 4:
             self.posX_OG = -100
-            self.posY_OG = -2.5
+            self.posY_OG = -5
 
 
     def toString(self):
-        return ("[ Vin: " + str(self.vin) + " ,speed: " + str(self.speed) + " ,accel0: " + str(
-            self.accel0) + " ,Entered time: " + str(self.enterTime0) + " ,Lane #: " + str(
-            self.lane) + " ,Expected time #: " + str(self.expectedTime0) + " ,first requested accel #: " + str(
-            self.accel01) + "]")
+        return ("[ Vin: " + str(self.vin) +
+                " ,speed: " + str(self.speed) +
+                " ,accel0: " + str(self.accel0)  +
+                " ,Entered time: " + str(self.enterTime0) +
+                " ,Lane #: " + str(self.lane) +
+                " turn #: " + str(self.turn) +
+                " ,Expected time #: " + str(self.expectedTime0) +
+                " ,first requested accel #: " + str( self.accel01) +
+                "]")
 
     def updateAccel01(self, a):
         self.accel01 = self.accel01 + a[0]
@@ -127,6 +133,7 @@ class Car:
 
 
     def piec0XY(self, T):
+
         # add in car data
         path = self.vin
         path = np.append(path, self.lane)
@@ -139,30 +146,87 @@ class Car:
         countX = 0
         countY = 0
         delta = 0
-       # print "here"
+
+
         for inx, val in enumerate(time):
-            # X values
-            if (val < self.enterTime0) or (self.lane % 2 == 1): # car not started yet
-                delta = 0.0
+           #vert
+            if (val < self.enterTime0): # car not started yet
                 countX = countX + 1
-            else:  #TODO: you are going to put turning shit in here
-                delta = self.trajectory01(realTime[inx - countX], 0)
-                if self.lane == 2:
-                    delta = delta * -1
-
-            self.posX = self.posX_OG + delta
-
-            #Y values
-            if (val < self.enterTime0) or (self.lane % 2 == 0):
-                delta = 0.0
-                countY = countY + 1
             else:
-                delta = self.trajectory01(realTime[inx - countY], 0)
-                if self.lane == 3:
-                    delta = delta * -1
+                if (self.lane == 1):   # vericle lanes
+                    # get distance travelled
+                    delta = self.trajectory01(realTime[inx - countX], 0)
 
-            self.posY = self.posY_OG + delta
+                    #check for turn
+                    if abs(delta) >= abs(self.p2_distance):
+                        if self.turn == 1:
+                            self.posY = -1 * self.inter_size/2
+                            self.posX = self.posX_OG + (delta + self.p2_distance)
+                        else:
+                            self.posX = self.posX_OG
+                            self.posY = self.posY_OG + delta
 
+                    else:
+                        self.posX = self.posX_OG
+                        self.posY = self.posY_OG + delta
+
+                elif(self.lane == 3):
+                    # get distance travelled
+                    delta = self.trajectory01(realTime[inx - countX], 0) * -1
+
+                    # check for turn
+                    if abs(delta) >= abs(self.p2_distance):
+                        if self.turn == 1:
+                            self.posY = self.inter_size/2
+                            self.posX = self.posX_OG - (-1 * delta + self.p2_distance)
+                        else:
+                            self.posX = self.posX_OG
+                            self.posY = self.posY_OG + delta
+
+                    else:
+                        self.posX = self.posX_OG
+                        self.posY = self.posY_OG + delta
+
+
+                elif(self.lane == 2):
+                    # get distance travelled
+                    delta = self.trajectory01(realTime[inx - countX], 0)
+
+                    # check for turn
+                    if abs(delta) >= abs(self.p2_distance):
+                        if self.turn == 1:
+                            self.posX =  self.inter_size / 2
+                            self.posY = self.posY_OG + (delta + self.p2_distance)
+                        else:
+                            self.posY = self.posY_OG
+                            self.posX = self.posX_OG + delta
+
+                    else:
+                        self.posY = self.posY_OG
+                        self.posX = self.posX_OG - delta
+
+                elif (self.lane == 4):
+                    # get distance travelled
+                    delta = self.trajectory01(realTime[inx - countX], 0)
+
+                    # check for turn
+                    if abs(delta) >= abs(self.p2_distance):
+                        if self.turn == 1:
+                            self.posX = -1 * self.inter_size / 2
+                            self.posY = self.posY_OG - (delta + self.p2_distance)
+                        else:
+                            self.posY = self.posY_OG
+                            self.posX = self.posX_OG + delta
+
+                    else:
+                        self.posY = self.posY_OG
+                        self.posX = self.posX_OG + delta
+
+
+
+
+                else:
+                    print"horizontal"
 
             path = np.append(path, self.posX)
             path = np.append(path, self.posY)
@@ -176,6 +240,9 @@ class Car:
 
     def trajectory01(self, time, pos):
         return pos + (self.speed * time) + (0.5 * self.accel01 * (time ** 2))
+
+    def trajectory01_turn(self,time, pos, right):
+        print "turn"
 
 
 """

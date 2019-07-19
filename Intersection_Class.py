@@ -1,7 +1,7 @@
 import time
 import cmath
+import Intersection_Manager_class as IMC
 
-import random
 
 
 # helper functions
@@ -22,22 +22,30 @@ class Reservation:
     def toString(self):
         return ("[ Vin: " + str(self.vin) + " ,speed: " + str(self.speed) + " ,accel: " + str(
             self.accel) + " ,Entered time: " + str(self.enterTime) + " ,Lane #: " + str(
-            self.lane) + " ,Expected time #: " + str(self.expectedTime) + " ,Expected time2 #: " + str(self.expectedTime2) + " ,requested accel #: " + str(
+            self.lane) + " ,turn #: " + str(
+            self.turn) + " ,Expected time #: " + str(self.expectedTime) + " ,Expected time2 #: " + str(self.expectedTime2) + " ,requested accel #: " + str(
             self.requestedAccel) + "]")
 
-    def __init__(self, VIN, speed, accel, enterTime, lane):
+    def __init__(self, VIN, speed, accel, enterTime, lane, t):
         self.vin = VIN
         self.speed = speed
         self.accel = accel
+
+
         self.enter = 0  # 0 if entering -- 1 if exiting
+
         self.enterTime = enterTime
-        self.expectedTime = enterTime + expect(-95, self.speed, self.accel) # to middle of first qm  , changed to enter tom from time()
-        #change distance to length - (side/2)
-        self.expectedTime2 = enterTime + expect(-105, self.speed, self.accel)
+        self.expectedTime = enterTime + expect(IMC.Intersection_Manager.p1_distance, self.speed, self.accel) # to middle of first qm  , changed to enter tom from time()
+        self.expectedTime2 = enterTime + expect(IMC.Intersection_Manager.p1_distance, self.speed, self.accel)
+
+
         self.nextt = None
         self.prev = None
+
+
         self.lane = lane
-        self.proposedTime = 0
+        self.turn = t
+
         self.requestedAccel = 0
         self.set = 0
 
@@ -65,8 +73,8 @@ class Intersection:
 
     def __init__(self,n):
         self.start = 1
-        self.head = Reservation(0, 0, 0, 0, 0)
-        self.tail = Reservation(99, 0, 0, 0, 0)
+        self.head = Reservation(0, 0, 0, 0, 0, 0)
+        self.tail = Reservation(99, 0, 0, 0, 0, 0)
         self.size = 0
         self.starTime = time.time()
         self.name = n
@@ -382,8 +390,9 @@ class Intersection:
         else:
             return False, right
 
-
-
+    def getAccelValue(self,res, newTime, dist):
+        T = newTime - res.enterTime
+        return (2 * (dist - res.speed * T)) / (T ** 2)
 
 
     def print_as_list(self):
@@ -411,7 +420,7 @@ class Intersection:
 
         # search all nodes TODO:only search near by nodes
         # if empty
-        if self.head.nextt is None:
+        if self.head.nextt is self.tail:
             # print("List is empty, adding")
             return True
         # if not empty
@@ -518,6 +527,8 @@ class Intersection:
                 return current_node  # returns right node x---(x)
             current_node = current_node.prev
         return None
+
+
 
     # find open space to left of time T: (1) size greater than tolerance*2 (2) no line skipping
     # returns head. if nothing found

@@ -35,7 +35,7 @@ public class driver {
 
 		// Location of file to read
 		File file = new File(
-				"C://Users/maxwe/Documents/Research 2019/Algorithm/Intersection_Research-master/carData.csv");
+				"/home/maxwell/Documents/Scripts/Intersection_Research-master/carData.csv");
 
 		//C:\Users\maxwe\Documents\Research 2019\Algorithm\Intersection_Research-master
 		//"/home/maxwell/Documents/Scripts/Intersection_Research-master/carData.csv");
@@ -55,7 +55,13 @@ public class driver {
 			for (int i = 0; i < frames; i = i + 2) {
 				TimeUnit.MICROSECONDS.sleep(timeStep);
 				map.clear();
-				map.square(-2.5, -2.5, 5);
+				
+				map.square(-5, -5, 2.5);
+				map.square(5, -5, 2.5);
+				map.square(5, 5 , 2.5);
+				map.square(-5, 5, 2.5);
+				
+				
 				while (scanner.hasNextLine()) { // iterte through row
 					thisLine = scanner.nextLine();
 					// System.out.println(thisLine);
@@ -69,7 +75,7 @@ public class driver {
 						// Double.parseDouble(thisLines[i+1]) );
 						pos.setLocation(Double.parseDouble(thisLines[i]), Double.parseDouble(thisLines[i + 1]));
 					}
-					if ((pos.getX() == 2.5 && pos.getY() == -100) || (pos.getX() == 100 && pos.getY() == 2.5) || (pos.getX() == -2.5 && pos.getY() == 100) || (pos.getX() == -100 && pos.getY() == 2.5)) {
+					if ((pos.getX() == 5 && pos.getY() == -100) || (pos.getX() == 100 && pos.getY() == 5) || (pos.getX() == -5 && pos.getY() == 100) || (pos.getX() == -100 && pos.getY() == 5)) {
 
 					} else {
 						map.setPenColor((vin * 15) % 256, (vin * 7) % 256, (vin * 99) % 256);
