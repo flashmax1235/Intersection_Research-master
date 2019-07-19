@@ -16,7 +16,7 @@ Things to store:
 """
 
 import time
-import cmath
+import cmath, math
 import numpy as np
 import Intersection_Class as IC
 
@@ -71,7 +71,7 @@ class Car:
     expectedTime1 = 0  # after seconds update to end
 
     # simulation specs
-    max_time = 20
+    max_time = 30
     resolution = max_time * 10
 
 
@@ -162,6 +162,12 @@ class Car:
                         if self.turn == 1:
                             self.posY = -1 * self.inter_size/2
                             self.posX = self.posX_OG + (delta + self.p2_distance)
+
+                        if self.turn == 2:
+                            self.posY = -1 * self.inter_size / 2 - ((delta + self.p2_distance) * math.sin(10))
+                            self.posX = self.posX_OG - (delta + self.p2_distance)
+
+
                         else:
                             self.posX = self.posX_OG
                             self.posY = self.posY_OG + delta
@@ -199,7 +205,7 @@ class Car:
                             self.posY = self.posY_OG + (delta + self.p2_distance)
                         else:
                             self.posY = self.posY_OG
-                            self.posX = self.posX_OG + delta
+                            self.posX = self.posX_OG - delta
 
                     else:
                         self.posY = self.posY_OG

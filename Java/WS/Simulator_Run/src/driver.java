@@ -46,8 +46,8 @@ public class driver {
 		String thisLine;
 
 		// simulation parameters
-		long timeStep = 250000/2; // microseconds  1/(20 * frames)
-		int frames = 200 * 2 + 2;
+		long timeStep = 250000/20; // microseconds  1/(20 * frames)
+		int frames = 300 * 2 + 2;
 
 		try {
 			Scanner scanner = new Scanner(file);

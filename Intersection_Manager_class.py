@@ -36,8 +36,8 @@ class Intersection_Manager:
     inter_size = 10
     inter_max_speed = 20
     inter_tolerance_time = 0.2  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
-    p1_distance = -1 * inter_side_length - (inter_size / 2)
-    p2_distance = -1 * inter_side_length + (inter_size / 2)
+    p1_distance = -1 * (inter_side_length - (inter_size / 2))
+    p2_distance = -1 * (inter_side_length + (inter_size / 2))
     check_resolution = inter_tolerance_time/4
 
 
@@ -75,6 +75,7 @@ class Intersection_Manager:
             newNode = self.quadBooker_straight(3, 0, res)
         else:
             print("unknown lane")
+        print newNode.toString()
         return newNode.requestedAccel, newNode.expectedTime
 
     def quadBooker_straight(self, P1, P2, res):
@@ -89,7 +90,8 @@ class Intersection_Manager:
                 if q2_status[0]:  # availble in q2?
                     print ("P2 open")
                     # insert reservation
-
+                    if(newNode.vin == 3):
+                        print "here"
                     # insert generic reservation, only expected time
                     simpleRes = IC.Reservation(newNode.vin, newNode.speed, newNode.accel,
                                                newNode.enterTime, newNode.lane, newNode.turn)
@@ -157,12 +159,8 @@ class Intersection_Manager:
                     else:
                         GoodSpot = result[0]
 
-                    #print (result[0], result[1].toString())
-
-                    #T.sleep(0.5)
-
                 # update expected time
-                #print "here"
+
                 newNode.expectedTime = possibleTime
 
                 # calculate accel value needed for P1, update accel and requested accel
@@ -206,12 +204,7 @@ class Intersection_Manager:
                     else:
                         GoodSpot = result[0]
 
-                    # print (result[0], result[1].toString())
-
-                    # T.sleep(0.5)
-
                 # update expected time
-                # print "here"
                 newNode.expectedTime = possibleTime
 
                 # calculate accel value needed for P1, update accel and requested accel

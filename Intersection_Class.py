@@ -36,7 +36,7 @@ class Reservation:
 
         self.enterTime = enterTime
         self.expectedTime = enterTime + expect(IMC.Intersection_Manager.p1_distance, self.speed, self.accel) # to middle of first qm  , changed to enter tom from time()
-        self.expectedTime2 = enterTime + expect(IMC.Intersection_Manager.p1_distance, self.speed, self.accel)
+        self.expectedTime2 = enterTime + expect(IMC.Intersection_Manager.p2_distance, self.speed, self.accel)
 
 
         self.nextt = None
@@ -427,12 +427,13 @@ class Intersection:
         else:
             n = self.head.nextt
             while n is not self.tail:  # loop until reached tail
-                if (abs(n.expectedTime - res.expectedTime) < self.inter_tolerance_time) or (
-                        (n.expectedTime > res.expectedTime) and (
-                        n.lane == res.lane)):  # (1) colision in lane  (2) line skip   TODO:specify whitch criteria it failed at
-                    # print abs(n.expectedTime - res.expectedTime)
+                if (abs(n.expectedTime - res.expectedTime) < self.inter_tolerance_time) or ((n.expectedTime > res.expectedTime) and (n.lane == res.lane)):  # (1) colision in lane  (2) line skip   TODO:specify whitch criteria it failed at
                     # print "no room"
                     return False
+                if(res.turn == 0): # going straight must check in front P2 and check ot to compare with cross fire
+                    if(n.expectedTime2 != None):
+                        if (abs(n.expectedTime2 - res.expectedTime2) < self.inter_tolerance_time) or (n.expectedTime2 > res.expectedTime2):
+                                return False
                 n = n.nextt
             if n is self.tail:
                 # print("appears to be room")
