@@ -66,17 +66,21 @@ class Car:
 
     # Proposed Timeline
     expectedTime0 = 0  # original specs to 95m ***100m for now
-    expectedTime00 = 0  #original specs to 105m
+    expectedTime00 = 0  # original specs to 105m
     expectedTime01 = 0  # after first update to middle
     expectedTime1 = 0  # after seconds update to end
 
     # simulation specs
-    max_time = 30
+    max_time = 60
     resolution = max_time * 10
 
+    # sizing
+    width = 0
+    length = 0
 
 
-    def __init__(self, VIN, speed, accel, enterTime, lane, turn):
+
+    def __init__(self, VIN, speed, accel, enterTime, lane, turn, l, w):
         self.vin = VIN
         self.speed = speed
         self.accel0 = accel
@@ -90,6 +94,8 @@ class Car:
         self.turn = turn
         self.posX_OG = 0
         self.posY_OG = 0
+        self.length = l
+        self.width = w
 
 
 
@@ -97,15 +103,15 @@ class Car:
         # Assume:  -100:100 X -100:100
         if self.lane == 1:
             self.posX_OG = 5
-            self.posY_OG = -100
+            self.posY_OG = -200
         elif self.lane == 2:
-            self.posX_OG = 100
+            self.posX_OG = 200
             self.posY_OG = 5
         elif self.lane == 3:
             self.posX_OG = -5
-            self.posY_OG = 100
+            self.posY_OG = 200
         elif self.lane == 4:
-            self.posX_OG = -100
+            self.posX_OG = -200
             self.posY_OG = -5
 
 
@@ -137,6 +143,15 @@ class Car:
         # add in car data
         path = self.vin
         path = np.append(path, self.lane)
+
+        # add in car dimention
+        if (self.lane % 2 == 1):
+            path = np.append(path, self.length)
+            path = np.append(path, self.width)
+        else:
+            path = np.append(path, self.width)
+            path = np.append(path, self.length)
+
 
         # timelines
         time = np.linspace(T, T + self.max_time, self.resolution)
@@ -227,9 +242,6 @@ class Car:
                     else:
                         self.posY = self.posY_OG
                         self.posX = self.posX_OG + delta
-
-
-
 
                 else:
                     print"horizontal"

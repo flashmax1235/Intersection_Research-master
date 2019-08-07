@@ -1,6 +1,8 @@
 import time
 import cmath
 import Intersection_Manager_class as IMC
+import numpy
+
 
 
 
@@ -26,7 +28,7 @@ class Reservation:
             self.turn) + " ,Expected time #: " + str(self.expectedTime) + " ,Expected time2 #: " + str(self.expectedTime2) + " ,requested accel #: " + str(
             self.requestedAccel) + "]")
 
-    def __init__(self, VIN, speed, accel, enterTime, lane, t):
+    def __init__(self, VIN, speed, accel, enterTime, lane, t, l, w):
         self.vin = VIN
         self.speed = speed
         self.accel = accel
@@ -49,11 +51,16 @@ class Reservation:
         self.requestedAccel = 0
         self.set = 0
 
+        self.length = l
+        self.width = w
+
 
 
 
 
 class Intersection:
+
+
     # car criteria
     car_max_accel = 3
     car_max_decel = -3
@@ -63,7 +70,7 @@ class Intersection:
     inter_side_length = 100
     inter_size = 10
     inter_max_speed = 20
-    inter_tolerance_time = 0.2  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
+    inter_tolerance_time = 0.6  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
 
     # set up
     starTime = 0
@@ -73,8 +80,8 @@ class Intersection:
 
     def __init__(self,n):
         self.start = 1
-        self.head = Reservation(0, 0, 0, 0, 0, 0)
-        self.tail = Reservation(99, 0, 0, 0, 0, 0)
+        self.head = Reservation(0, 0, 0, 0, n, 0, 0, 0)
+        self.tail = Reservation(99, 0, 0, 0, n, 0, 0, 0)
         self.size = 0
         self.starTime = time.time()
         self.name = n
@@ -438,6 +445,211 @@ class Intersection:
             if n is self.tail:
                 # print("appears to be room")
                 return True
+        s = time.time()
+
+
+
+
+
+
+
+
+    # checks if open timespot in P1 (using @ P1 speed for tolerance time)
+    # finds car in front
+    # determines case #
+    # checks accordingly (for colision
+    def check_time_and_colision(self, res):
+        place = self.simple_check_time(res)
+
+        if place[0]: # check time slot for P1
+            car_infront = self.findCarInfront()
+            if car_infront == self.head:
+                return True, place[1]
+            if self.check_colision(res, car_infront):
+                print "safe"
+                return True, place[1]
+            else:
+                return False, place[1]
+        else:
+            return False, place[1]
+
+
+    def findCarInfront(self):
+        current = self.tail.prev
+        while current.lane != self.name:
+            current = current.prev
+        return current
+
+
+    # (1) check initial seperation
+    # (2) check for min seperation during path
+    def check_colision(self, res, car):
+
+        print "using accel value: " + str(res.accel)
+        tolerance =  (res.length + car.length)* 1.2 #meters #calculate tolerance based on size
+
+
+        #difference in enter time
+        deltaT = res.enterTime - car.enterTime
+
+        #calculate separation at deltaT
+        seperation = (car.speed * deltaT) + (0.5 * car.accel * deltaT ** 2)
+
+        if seperation < tolerance:
+            return False
+            exit(9)
+
+
+        # generate derivative
+        time = numpy.linspace(0, 20, 15 * 50)   # substiture length to p2 and make a real resolution
+
+
+
+
+        delta = []
+        for val in time:
+            data = (car.speed * (val + deltaT)) + (0.5 * car.accel * (val + deltaT) ** 2) - ((res.speed * val) + (0.5 * res.accel * (val) ** 2))
+            delta.append(data)
+        print delta
+        mini = min(delta)
+        if (mini < tolerance):
+            print "min distance: " + str(mini)
+            return False
+        else:
+            return True
+
+
+
+        """
+        efficient way
+        derivative = []
+
+        for val in time:
+            data = (car.speed + car.accel * (val + deltaT)) - (res.speed + res.accel * val)
+            print data
+        """
+
+
+
+
+
+    #checks time spot, returns left of it and boolean
+    def simple_check_time(self,res):
+        closest = self.find_closest_Time(res.expectedTime)
+        if closest == self.tail:
+            return True, self.tail.prev
+
+        """
+        if (closest.lane == self.n): #if in same lane then tolerance is length + length
+            tolerance = 10
+        else:                          #different lane then tolerance is length width
+
+            tolerance = self.inter_tolerance_time  #TODO change to speed at PX
+        """
+        tolerance = self.calculateToleranceTime(res, closest)
+
+        if (abs(res.expectedTime - closest.expectedTime) >= tolerance) and ((res.expectedTime - closest.prev.expectedTime) >= tolerance) and (abs(res.expectedTime - closest.nextt.expectedTime) > tolerance):
+            if res.expectedTime > closest.expectedTime:
+                return True, closest
+            else:
+                return True, closest.prev
+
+        else:
+            return False, None
+
+    # checks time spot, returns left of it and boolean
+
+
+    #time not res based
+    def simple_check_timeBased(self, t):
+        closest = self.find_closest_Time(t)
+        #print closest.toString()
+        if closest == self.tail:
+            return True, self.tail.prev
+
+        tolerance = self.calculateToleranceTime(res, closest)
+
+        if (abs(t - closest.expectedTime) >= tolerance) and (
+                (t - closest.prev.expectedTime) >= tolerance) and (
+                abs(t - closest.nextt.expectedTime) > tolerance):
+            if t > closest.expectedTime:
+                return True, closest
+            else:
+                return True, closest.prev
+
+        else:
+            return False, closest
+
+
+
+
+    #checks time spot, returns left of it and boolean
+    #uses expected time 2
+    def simple_check_time2(self, res):
+        closest = self.find_closest_Time(res.expectedTime2)
+        if closest == self.tail:
+            return True, self.tail.prev
+
+        tolerance = self.calculateToleranceTime(res, closest)
+        if (abs(res.expectedTime2 - closest.expectedTime) >= tolerance) and ((res.expectedTime2 - closest.prev.expectedTime) >= tolerance) and (abs(res.expectedTime2 - closest.nextt.expectedTime) > tolerance):
+            if res.expectedTime2 > closest.expectedTime:
+                return True, closest
+            else:
+                return True, closest.prev
+
+        else:
+            return False, None
+
+
+
+    def calculateToleranceTime(self, res, car):
+        print ("I got a low tolerance to burple kush")
+        # calculate min speed of res
+        Rescoef = [0.5* res.accel, res.speed, (-1 * self.inter_side_length) - (2 * res.length + car.width)]
+        ResPossibleMinSpeedTime = min(numpy.roots(Rescoef))
+        ResPossibleMinSpeed = res.speed + (res.accel * ResPossibleMinSpeedTime )
+        # TODO: look at range now!!
+
+        # calculate min speed of car
+        Carcoef = [0.5 *car.accel, car.speed, (-1 * self.inter_side_length) + (2 * car.length + res.width)]
+        CarPossibleMinSpeedTime =  min(numpy.roots(Carcoef))
+        CarPossibleMinSpeed = car.speed + (car.accel * CarPossibleMinSpeedTime)
+        #TODO: look at range now!!
+
+        # calculate tolerance time1
+        option1 = (res.length / ResPossibleMinSpeed) + (car.width / CarPossibleMinSpeed)
+
+        # calculate tolerance time1
+        option2 = (car.length / CarPossibleMinSpeed) + (res.width / ResPossibleMinSpeed)
+
+        # return max
+        temp = max(option1, option2)
+
+        if temp < 0:
+            print temp
+            print res.toString()
+            print car.toString()
+            print CarPossibleMinSpeed
+            print ResPossibleMinSpeed
+            print Rescoef
+            exit(99)
+
+
+        print temp
+        return max(option1,option2)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     # check if lane is safe: (1)lane is empty at that time (2) does not cut the line in its lane

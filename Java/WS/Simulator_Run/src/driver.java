@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.List;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -22,13 +23,15 @@ public class driver {
 		Complex check = new Complex(0, 0);
 		Draw map = new Draw();
 		map.setCanvasSize(800, 800);
-		map.setXscale(-100, 100);
-		map.setYscale(-100, 100);
+		map.setXscale(-200, 200);
+		map.setYscale(-200, 200);
 
 		// variables
 		String[] data;
 		int vin; // also corisponds to line#
 		int lane;
+		double w;
+		double l;
 		double delta = 0;
 		int counter = 0; // 0 and 1 read in land and vin, after that are points
 		Point2D pos = new Point2D.Double();
@@ -46,8 +49,8 @@ public class driver {
 		String thisLine;
 
 		// simulation parameters
-		long timeStep = 250000/20; // microseconds  1/(20 * frames)
-		int frames = 300 * 2 + 2;
+		long timeStep = 250000/40; // microseconds  1/(20 * frames)
+		int frames = 600 * 2 + 4;
 
 		try {
 			Scanner scanner = new Scanner(file);
@@ -69,17 +72,24 @@ public class driver {
 					thisLines = thisLine.split(",");
 					vin = (int) Double.parseDouble(thisLines[0]);
 					lane = (int) Double.parseDouble(thisLines[1]);
+					l = Double.parseDouble(thisLines[2]);
+					w = Double.parseDouble(thisLines[3]);
+					
 
 					if (i > 1) {
 						// System.out.print(Double.parseDouble(thisLines[i]) + " " +
 						// Double.parseDouble(thisLines[i+1]) );
 						pos.setLocation(Double.parseDouble(thisLines[i]), Double.parseDouble(thisLines[i + 1]));
 					}
-					if ((pos.getX() == 5 && pos.getY() == -100) || (pos.getX() == 100 && pos.getY() == 5) || (pos.getX() == -5 && pos.getY() == 100) || (pos.getX() == -100 && pos.getY() == 5)) {
+					if ((pos.getX() == 5 && pos.getY() == -100) || (pos.getX() == 100 && pos.getY() == 5) || (pos.getX() == -5 && pos.getY() == 100) || (pos.getX() == -100 && pos.getY() == 5)|| (pos.getX() == 0 && pos.getY() == 0)) {
 
 					} else {
 						map.setPenColor((vin * 15) % 256, (vin * 7) % 256, (vin * 99) % 256);
-						map.filledCircle(pos.getX(), pos.getY(), 0.5);
+						map.filledRectangle(pos.getX(), pos.getY(), w, l);
+						//map.setPenColor(Color.black);
+						//map.filledCircle(pos.getX(), pos.getY(), 1);
+						
+						
 					}
 
 				}
