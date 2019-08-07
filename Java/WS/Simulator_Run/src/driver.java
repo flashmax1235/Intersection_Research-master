@@ -49,7 +49,7 @@ public class driver {
 		String thisLine;
 
 		// simulation parameters
-		long timeStep = 250000/40; // microseconds  1/(20 * frames)
+		long timeStep = 250000/4; // microseconds  1/(20 * frames)
 		int frames = 600 * 2 + 4;
 
 		try {

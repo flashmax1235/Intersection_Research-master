@@ -591,7 +591,9 @@ class Intersection:
             return True, self.tail.prev
 
         tolerance = self.calculateToleranceTime(res, closest)
-        if (abs(res.expectedTime2 - closest.expectedTime) >= tolerance) and ((res.expectedTime2 - closest.prev.expectedTime) >= tolerance) and (abs(res.expectedTime2 - closest.nextt.expectedTime) > tolerance):
+
+
+        if (abs(res.expectedTime2 - closest.expectedTime) > tolerance) and ((res.expectedTime2 - closest.prev.expectedTime) > tolerance) and (abs(res.expectedTime2 - closest.nextt.expectedTime) > tolerance):
             if res.expectedTime2 > closest.expectedTime:
                 return True, closest
             else:
