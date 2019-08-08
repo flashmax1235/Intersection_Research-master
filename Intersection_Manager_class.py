@@ -21,13 +21,13 @@ class Intersection_Manager:
     count = 0
     #who is going to own this stuff??
     # Intersection Criteria
-    inter_side_length = 100
+    inter_side_length = 50
     inter_size = 10
     inter_max_speed = 20
-    inter_tolerance_time = 0.6  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
+    inter_tolerance_time = 0.1
     p1_distance = -1 * (inter_side_length - (inter_size / 2))
     p2_distance = -1 * (inter_side_length + (inter_size / 2))
-    check_resolution = inter_tolerance_time/4
+
 
 
     def __init__(self):
@@ -72,20 +72,13 @@ class Intersection_Manager:
         newNode = res
         # must check lane 1 and lane 2
         while (newNode.set != 1):  # continue looking until reservation is set and safe
+            print ("\n\n")
             if self.quads[P1].check_time_and_colision(newNode)[0]:
                 print ("P1 open")
-
                 # check to see if q2 is open
-
                 q2_status = self.quads[P2].simple_check_time2(newNode)
                 if q2_status[0]:  # availble in q2?
                     print ("P2 open")
-
-                    # check new methods
-                    print "\n\n\n newMethod \n"
-                    self.quads[P1].check_colision(newNode, self.quads[P1].tail.prev)
-                    print ("\n\n\n")
-
 
                     # insert reservation
                     # insert generic reservation, only expected time
@@ -105,85 +98,16 @@ class Intersection_Manager:
                         q1_status = self.quads[P1].simple_check_time(newNode)[1]  # TODO already calculated in if statment...
                         self.quads[P1].insertBetween(q1_status, q1_status.nextt, newNode)
                         newNode.set = 1
-
-
-
                 else:  # not available in q2, find open time in q2
                     print ("P2 not open")
-                    # find next avalible change P1 only looking to the right todo: UNECSSARY INITIAL CHECK
-
-
-                    #todo: turn into function plzz
-                    # find next possible time for P1
-                    GoodSpot = False
-                    possibleTime = newNode.expectedTime + self.inter_tolerance_time / 2
-
-                    while not GoodSpot:
-                        #print "propsed time is: " + str(possibleTime)
-                        result = self.quads[P1].check_avalability_time(possibleTime)
-                        if not result[0]:  # not avalible, something in the way, going tolook after that thing
-                            if (result[1] == self.quads[P1].tail):
-                                possibleTime = possibleTime + self.inter_tolerance_time / 2
-                            else:
-                                possibleTime = result[1].expectedTime + self.inter_tolerance_time / 2
-                        else:
-                            GoodSpot = result[0]
-
-                        #print (result[0], result[1].toString())
-
-                        #T.sleep(0.5)
-
-                    # update expected time
-                    newNode.expectedTime = possibleTime
-
-                    # calculate accel value needed for P1, update accel and requested accel
-                    newNode.accel = self.quads[P1].getAccelValue(newNode, possibleTime, -1 * self.p1_distance)
-                    newNode.requestedAccel = newNode.accel
-                    newNode.expectedTime2 = IC.expect(self.p2_distance, newNode.speed, newNode.accel) + newNode.enterTime
+                    newNode = self.quads[P1].findNextBest(newNode)
             else:
                 self.count = self.count + 1
-                if self.count == 10:
+                if self.count == 30:
                     exit(10)
                 print("P1 does not fit")
                 # find next possible time for P1
-                GoodSpot = False
-                possibleTime = newNode.expectedTime + self.inter_tolerance_time / 2
-
-                ####
-                newNode.expectedTime = possibleTime
-                # calculate accel value needed for P1, update accel and requested accel
-                newNode.accel = self.quads[P1].getAccelValue(newNode, possibleTime, -1 * self.p1_distance)
-                newNode.requestedAccel = newNode.accel
-                newNode.expectedTime2 = IC.expect(self.p2_distance, newNode.speed, newNode.accel) + newNode.enterTime
-                ###
-
-                print possibleTime
-                while not GoodSpot:
-                    result = self.quads[P1].simple_check_time(newNode)
-                    if not result[0]:  # not avalible, something in the way, going tolook after that thing
-                            possibleTime = possibleTime + self.inter_tolerance_time / 2
-                            #possibleTime = result[1].expectedTime + self.inter_tolerance_time / 2
-                    else:
-                        GoodSpot = result[0]
-                    ##
-                    newNode.expectedTime = possibleTime
-                    # calculate accel value needed for P1, update accel and requested accel
-                    newNode.accel = self.quads[P1].getAccelValue(newNode, possibleTime, -1 * self.p1_distance)
-                    newNode.requestedAccel = newNode.accel
-                    newNode.expectedTime2 = IC.expect(self.p2_distance, newNode.speed,
-                                                      newNode.accel) + newNode.enterTime
-                    ##
-
-                #TODO maybe a duplicate
-
-                # update expected time
-                newNode.expectedTime = possibleTime
-                # calculate accel value needed for P1, update accel and requested accel
-                newNode.accel = self.quads[P1].getAccelValue(newNode, possibleTime, -1 * self.p1_distance)
-                newNode.requestedAccel = newNode.accel
-                newNode.expectedTime2 = IC.expect(self.p2_distance, newNode.speed, newNode.accel) + newNode.enterTime
-
-                print newNode.accel
+                newNode = self.quads[P1].findNextBest(newNode)
         return newNode
 
     def quadBooker_RightTurn(self, P1, lane, res):
@@ -230,7 +154,6 @@ class Intersection_Manager:
                 newNode.expectedTime2 = IC.expect(self.p2_distance, newNode.speed, newNode.accel) + newNode.enterTime
         newNode.requestedAccel = newNode.accel
         return newNode
-
 
 
 

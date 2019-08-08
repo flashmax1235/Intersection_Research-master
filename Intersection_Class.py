@@ -21,12 +21,7 @@ def expect(c, b, a):
 
 class Reservation:
 
-    def toString(self):
-        return ("[ Vin: " + str(self.vin) + " ,speed: " + str(self.speed) + " ,accel: " + str(
-            self.accel) + " ,Entered time: " + str(self.enterTime) + " ,Lane #: " + str(
-            self.lane) + " ,turn #: " + str(
-            self.turn) + " ,Expected time #: " + str(self.expectedTime) + " ,Expected time2 #: " + str(self.expectedTime2) + " ,requested accel #: " + str(
-            self.requestedAccel) + "]")
+
 
     def __init__(self, VIN, speed, accel, enterTime, lane, t, l, w):
         self.vin = VIN
@@ -56,22 +51,32 @@ class Reservation:
 
 
 
-
+    def toString(self):
+        t = self.expectedTime - self.enterTime
+        if self.expectedTime2 != None:
+            t2 = self.expectedTime2 - self.enterTime
+        else:
+            t2 = "na"
+        return ("[ Vin: " + str(self.vin) + " ,speed: " + str(self.speed) + " ,accel: " + str(
+            self.accel) + " ,Entered time: " + str(self.enterTime) + " ,Lane #: " + str(
+            self.lane) + " ,turn #: " + str(
+            self.turn) + " ,Expected time #: " + str(self.expectedTime) + " ,Expected time2 #: " + str(self.expectedTime2) + " ,requested accel #: " + str(
+            self.requestedAccel) + "time to P1: " + str(t) + "time to P2: " + str(t2)  +"]")
 
 class Intersection:
 
 
     # car criteria
-    car_max_accel = 3
-    car_max_decel = -3
+    car_max_accel = 0.7
+
     car_max_speed = 50
 
     # Intersection Criteria
-    inter_side_length = 100
+    inter_side_length = 50
     inter_size = 10
     inter_max_speed = 20
     inter_tolerance_time = 0.6  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
-
+    p1 = inter_side_length - (inter_size / 2)
     # set up
     starTime = 0
 
@@ -135,53 +140,7 @@ class Intersection:
                 # print("searched all, closest is VIN: " + str(temp.vin))
                 return temp
 
-    def addReservation(self, VIN, speed, accel, enterTime, lane):
-        new_node = Reservation(VIN, speed, accel, enterTime, lane)
 
-        # check if lane is safe: (1)lane is empty at that time (2) does not cut the line in its lane
-        if (self.check_avalability_initial(new_node)):
-            # If no head, set new node as head
-            if self.head.nextt == None:
-                self.head.nextt = new_node
-                self.head.nextt.nextt = self.tail
-                self.tail.prev = new_node
-                return
-            else:
-                current_node = self.head
-                # if next not none (tail) continue traversing
-                while current_node.nextt != self.tail:
-                    current_node = current_node.nextt
-                # if tail, add to end
-                current_node.nextt = new_node
-                # set prev pointer to current node
-                new_node.prev = current_node
-                # set new tail to new node
-                new_node.nextt = self.tail
-                self.tail.prev = current_node
-            self.size = self.size = 1
-
-    def addReservation2(self, res):
-        new_node = res
-        if (self.check_avalability_initial(new_node)):
-            # If no head, set new node as head
-            if self.head.nextt == None:
-                self.head.nextt = new_node
-                self.head.nextt.nextt = self.tail
-                self.tail.prev = new_node
-                return
-            else:
-                current_node = self.head
-                # if next not none (tail) continue traversing
-                while current_node.nextt != self.tail:
-                    current_node = current_node.nextt
-                # if tail, add to end
-                current_node.nextt = new_node
-                # set prev pointer to current node
-                new_node.prev = current_node
-                # set new tail to new node
-                new_node.nextt = self.tail
-                self.tail.prev = current_node
-            self.size = self.size = 1
 
     def addReservation3(self, res):
         new_node = res
@@ -249,6 +208,7 @@ class Intersection:
                     self.insertBetween(left.prev, left, res)
                 else:
                     print("shit nothing fits...")
+
             elif (cursor == self.tail.prev):  # if last enetry is same lane
                 print ("same lane at end of list")
                 # reservation must be at end of the list
@@ -295,111 +255,9 @@ class Intersection:
                     exit()
         return res.requestedAccel, res.expectedTime
 
-    def find_best_option(self):
-        print("neither lol")
-        """
-        Everything under else
-        calcEnergy, within criteria, goal<>
-        """
-
-    def calcEnergyNeeded(self, res, option1, option2):  # option1 is left search, option2 is right search
-        # compare required energy, return
-        eng1 = abs(option1.expectedTime - self.inter_tolerance_time - res.expectedTime)
-        eng2 = abs(option2.expectedTime + self.inter_tolerance_time - res.expectedTime)
-        return eng1, eng2
-
-    def calcEnergyNeeded2(self, res, option1, option2):  # option1 is left search, option2 is right search
-        # compare required energy, return
-        eng1 = abs(option1.expectedTime - self.inter_tolerance_time - res.expectedTime2)
-        eng2 = abs(option2.expectedTime + self.inter_tolerance_time - res.expectedTime2)
-        return eng1, eng2
-
-
-    # returns tue/false,acceleration value p1
-    # Todo: incorperate current acceleratiuon value!! you fool!!!!!!!!!!!!!
-    def withinCriteriaLeft(self, res, option):  # option1 is left search, option2 is right search
-        opt1_time = (option.expectedTime - self.inter_tolerance_time) - option.enterTime
-        left = (2 * (self.inter_side_length - (self.inter_size/2) - res.speed * opt1_time)) / (opt1_time ** 2)
-
-        if (left < 0) and (left > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
-            print ("left deceleration approved!")
-            return True, left
-        elif (left > 0) and (left < self.car_max_accel):
-            print  ("left acceleration approved!")
-            return True, left
-        else:
-            return False, left
-
-    # returns tue/false,acceleration value p2
-    # Todo: incorperate current acceleratiuon value!! you fool!!!!!!!!!!!!!
-    def withinCriteriaLeftp2(self, res, option):  # option1 is left search, option2 is right search
-        opt1_time = (option.expectedTime - self.inter_tolerance_time) - option.enterTime
-        left = (2 * (self.inter_side_length + (self.inter_size / 2) - res.speed * opt1_time)) / (opt1_time ** 2)
-
-        if (left < 0) and (left > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
-            print ("left deceleration approved!")
-            return True, left
-        elif (left > 0) and (left < self.car_max_accel):
-            print ("left acceleration approved!")
-            return True, left
-        else:
-            return False, left
 
 
 
-
-    # returns tue/false,acceleration value for p1
-    # Todo: incorperate current acceleratiuon value!! you fool
-    def withinCriteriaRight(self, res, option):
-        optionTime = (option.expectedTime + self.inter_tolerance_time) - option.enterTime
-        right = (2 * (self.inter_side_length - (self.inter_size/2) - res.speed * optionTime)) / (optionTime ** 2)
-        print(optionTime + option.enterTime)
-        print(right)
-        if (right < 0) and (
-                right > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
-            print ("right deceleration approved!")
-            return True, right
-        elif (right > 0) and (right < self.car_max_accel):
-            print("right acceleration approved!")
-            return True, right
-        else:
-            return False, right
-
-    # returns tue/false,acceleration value for p2
-    # Todo: incorperate current acceleratiuon value!! you fool
-    def withinCriteriaRightp2(self, res, option):
-        optionTime = (option.expectedTime + self.inter_tolerance_time) - option.enterTime
-        right = (2 * (self.inter_side_length + (self.inter_size / 2) - res.speed * optionTime)) / (optionTime ** 2)
-        print(optionTime + option.enterTime)
-        print(right)
-        if (right < 0) and (
-                right > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
-            print("right deceleration approved!")
-            return True, right
-        elif (right > 0) and (right < self.car_max_accel):
-            print("right acceleration approved!")
-            return True, right
-        else:
-            return False, right
-
-    # returns tue/false,acceleration value for p1
-    # takes a time to be at
-    # Todo: incorperate current acceleratiuon value!! you fool
-    def withinCriteriaRightTimeBsed(self, res, T):
-        optionTime = (T + self.inter_tolerance_time) - res.enterTime
-        right = (2 * (self.inter_side_length - (self.inter_size / 2) - res.speed * optionTime)) / (optionTime ** 2)
-        if (right < 0) and (right > self.car_max_decel):  # check if pos or neg, compare to mac accel/dec and update res
-            print ("right deceleration approved!")
-            return True, right
-        elif (right > 0) and (right < self.car_max_accel):
-            print("right acceleration approved!")
-            return True, right
-        else:
-            return False, right
-
-    def getAccelValue(self,res, newTime, dist):
-        T = newTime - res.enterTime
-        return (2 * (dist - res.speed * T)) / (T ** 2)
 
 
     def print_as_list(self):
@@ -557,28 +415,7 @@ class Intersection:
         else:
             return False, None
 
-    # checks time spot, returns left of it and boolean
 
-
-    #time not res based
-    def simple_check_timeBased(self, t):
-        closest = self.find_closest_Time(t)
-        #print closest.toString()
-        if closest == self.tail:
-            return True, self.tail.prev
-
-        tolerance = self.calculateToleranceTime(res, closest)
-
-        if (abs(t - closest.expectedTime) >= tolerance) and (
-                (t - closest.prev.expectedTime) >= tolerance) and (
-                abs(t - closest.nextt.expectedTime) > tolerance):
-            if t > closest.expectedTime:
-                return True, closest
-            else:
-                return True, closest.prev
-
-        else:
-            return False, closest
 
 
 
@@ -605,7 +442,7 @@ class Intersection:
 
 
     def calculateToleranceTime(self, res, car):
-        print ("I got a low tolerance to burple kush")
+
         # calculate min speed of res
         Rescoef = [0.5* res.accel, res.speed, (-1 * self.inter_side_length) - (2 * res.length + car.width)]
         ResPossibleMinSpeedTime = min(numpy.roots(Rescoef))
@@ -637,201 +474,123 @@ class Intersection:
             exit(99)
 
 
-        print temp
-        return max(option1,option2)
+        print "proposed tolerance: " + str(abs(temp))
+        return abs(max(option1,option2)) * 1.2
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    # check if lane is safe: (1)lane is empty at that time (2) does not cut the line in its lane
-    # only checks P2
-    def check_avalability_initial2(self, res):
-        # print ("\n\n " + str(res.vin))
-        # print res.toString()
-        current_node = self.head
-
-        # search all nodes TODO:only search near by nodes
-        # if empty
-        if self.head.nextt is None:
-            # print("List is empty, adding")
-            return True
-        # if not empty
-        else:
-            n = self.head.nextt
-            while n is not self.tail:  # loop until reached tail
-                if (abs(n.expectedTime - res.expectedTime2) < self.inter_tolerance_time) or (
-                        (n.expectedTime > res.expectedTime2) and (
-                        n.lane == res.lane)):  # (1) colision in lane  (2) line skip   TODO:specify whitch criteria it failed at
-                    # print abs(n.expectedTime - res.expectedTime)
-                    # print "no room"
-                    return False
-                n = n.nextt
-            if n is self.tail:
-                # print("appears to be room")
-                return True
-
-
-
-    # checks if lane has opening at T for lane l
-    #  (1)lane is empty at that time
-    # does not need to check for line cutting, ONLY USE WHEN CHECKING SPECIFIC TIMES, NOT FOR INITIAL USE
-    # returns T/F and left node of opening
-    def check_avalability_time(self,T):
-        current_node = self.head
-        if(current_node == self.tail): #list is empty, must be true
-            return True, self.head
-
-
-        while (current_node.vin != 99):
-            if (abs(current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time):  # (1) enough space  lane
-                if(current_node.expectedTime - T >= self.inter_tolerance_time):
-                    return True, current_node  # returns right node (x)---x
-
-            current_node = current_node.nextt
-
-        #check if greater than tail.prev by tolerance
-        if T -current_node.prev.expectedTime >= self.inter_tolerance_time:
-            return True,current_node
-
-        return False, current_node
-
-
-    def check_P2_Avalibility(self, T):
-        current_node = self.head
-        # list is empty
-        if current_node.nextt == self.tail:
-            #print("case 1")
-            return True, self.head
-
-        # time is before first node
-        #if current_node.nextt.expectedTime > T:
-        if current_node.nextt.expectedTime - T >= self.inter_tolerance_time:
-            #print("case 2")
-            return True, self.head
-
-        # traverse to an opening
-        current_node = current_node.nextt
-        while current_node != self.tail:
-            if (abs(current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time):  # (1) enough space  lane
-                if (T - current_node.expectedTime > self.inter_tolerance_time):
-                    #print("case 3")
-                    return True, current_node  # returns right node x---(x)
-            current_node = current_node.nextt
-        #print("case 4")
-        return False, None
-
-    # find open space to left: (1) size greater than tolerance*2 (2) no line skipping
+    # find open space to left: (1) size greater than tolerances (2) no line skipping
+    # returns x..(x)
     # returns head. if nothing found
     def find_open_left(self, res):
         current_node = self.find_closest(res)
 
-        while (current_node.prev != None):
-            if (abs(current_node.expectedTime - current_node.prev.expectedTime) > 2 * self.inter_tolerance_time) and (
-                    current_node.nextt.lane != res.lane):  # (1) enough space  lane  (2) line skip
-                return current_node  # returns right node x---(x)
-            current_node = current_node.prev
-        return None
+        #check if near edge of list
+        if current_node.prev == self.head:
+            return current_node
 
 
+        while (current_node.prev != self.head):
+            t1 = self.calculateToleranceTime(res, current_node)
+            t2 = self.calculateToleranceTime(res, current_node.prev)
 
-    # find open space to left of time T: (1) size greater than tolerance*2 (2) no line skipping
-    # returns head. if nothing found
-    def find_open_left_alt(self, t,l):
-        current_node = self.find_closest_Time(t)
+            #check for line skipping
+            if current_node.lane == res.lane:
+                return self.head
 
-        while (current_node.prev != None):
-            if (abs(
-                    current_node.expectedTime - current_node.prev.expectedTime) > 2 * self.inter_tolerance_time) and (
-                    current_node.nextt.lane != l):  # (1) enough space  lane  (2) line skip
-                return current_node  # returns right node x---(x)
-            current_node = current_node.prev
-        return None
+            if(current_node.expectedTime - res.expectedTime >= t1) and (res.expectedTime - current_node.prev.expectedTime >= t2):
+               return current_node
+        return self.head
 
 
-
-    # find open space to left of time T: (1) size greater than tolerance*2 (2) no line skipping
-    # returns head. if nothing found
-    def find_open_right_alt(self, t, l):
-        current_node = self.find_closest_Time(t)
-
-        while (current_node.vin != 99):
-            if abs(
-                    current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time:  # (1) enough space  lane
-                return current_node  # returns right node x---(x)
-            current_node = current_node.nextt
-        return current_node
-
-
-    # find open space to left: (1) size greater than tolerance*2 (2) no line skipping
-    # returns head. if nothing found
+    # find open space to right: (1) size greater than tolerances (2) no line skipping
+    # returns (x)..x
+    # returns tail. if nothing found
     def find_open_right(self, res):
         current_node = self.find_closest(res)
-        while (current_node.vin != 99):
-            if abs(current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time:  # (1) enough space  lane
-                #print (current_node.toString())
-                return current_node  # returns right node x---(x)
-            current_node = current_node.nextt
-        #print (current_node.toString())
-        return current_node
+
+        #check if by edge of list
+        if current_node.nextt == self.tail:
+            return current_node
 
 
-    def find_open_right_newSpot(self, res, notThisNode):
-        # find opening with greater expected time than res
-        # if opening
-        current_node = self.find_closest(res)
+        while (current_node.nextt != self.tail):
+            t1 = self.calculateToleranceTime(res, current_node)
+            t2 = self.calculateToleranceTime(res, current_node.nextt)
 
-        while (current_node.vin != 99):
-            if abs(current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time and (current_node.nextt.vin != notThisNode.vin):  # (1) enough space  lane
-                #print (current_node.toString())
-                return current_node  # returns right node x---(x)
-            current_node = current_node.nextt
-
-        return current_node
-
-    # starts search from look_right_initial
-    # find open space to left: (1) size greater than tolerance*2 (2) no line skipping
-    # returns head. if nothing found
-    def find_open_right_fromPos(self, res, pos):
-        current_node = pos
-        while (current_node.vin != 99):
-            if abs(
-                    current_node.expectedTime - current_node.nextt.expectedTime) > 2 * self.inter_tolerance_time:  # (1) enough space  lane
-                return current_node  # returns right node x---(x)
-            current_node = current_node.nextt
-        return current_node
-
-    # searches all reservation to the right of closest, cannon be in the same lane, must go after
-    # if none found, look_open_left is correct, if same lane found, can only look to the right from that point
-    def look_right_initial(self, res):
-        current_node = self.find_closest(res)
-        last_same_lane = None
-        while current_node != self.tail:
-            if (current_node.lane == res.lane):
-                last_same_lane = current_node
-            current_node = current_node.nextt
-        return last_same_lane
-
-    def look_right_initial2(self, res):
-        current_node = self.find_closest2(res)
-        last_same_lane = None
-        while current_node != self.tail:
-            if (current_node.lane == res.lane):
-                last_same_lane = current_node
-            current_node = current_node.nextt
-        return last_same_lane
+            if (current_node.expectedTime - res.expectedTime >= t1) and (
+                    res.expectedTime - current_node.prev.expectedTime >= t2):
+                return current_node
+        return self.tail
 
 
+
+
+
+
+    def calcEnergyNeeded(self, res, lt, rt):  # option1 is left search, option2 is right search
+        # compare required energy, return
+        left = res.expectedTime - lt - res.enterTime
+        leftAccel = ((self.p1 - res.speed * left))/(0.5 * left ** 2)
+        if abs(leftAccel) > self.car_max_accel:
+            leftAccel = 0
+
+        right = res.expectedTime + rt - res.enterTime
+        rightAccel = ((self.p1 - res.speed * right)) / (0.5 * right ** 2)
+        if abs(rightAccel) > self.car_max_accel:
+            rightAccel = 0
+
+        return leftAccel, rightAccel, left, right
+
+
+    def findNextBest(self, res):
+        node = res
+
+        #find opening to the left
+        left = self.find_open_left(node)
+        leftTime =  left.expectedTime - self.calculateToleranceTime(node, left) - res.expectedTime
+
+
+        #find opening to the right
+        right = self.find_open_right(node)
+        rightTime = right.expectedTime + self.calculateToleranceTime(node, left) - res.expectedTime
+
+        #print ("Left: "  + str(left.toString())  + " -- " + str(leftTime))
+        #print ("Right: " + str(right.toString()) + " -- " + str(rightTime))
+
+
+        #calculate options
+        goal = self.calcEnergyNeeded(res, leftTime, rightTime) #return : left accel , right accel, left T, right T
+
+
+        #compare and add
+        if goal[0] == 0: #left does not exist
+            node.accel = goal[1]
+            node.requestedAccel = goal[1]
+            node.expectedTime = goal[3] + node.enterTime
+            node.expectedTime2 = expect(self.p1 + self.inter_size, node.speed, node.accel) + node.enterTime
+        elif goal[1] == 0: #right does not exist
+            node.accel = goal[0]
+            node.requestedAccel = goal[0]
+            node.expectedTime = goal[2] + node.enterTime
+            node.expectedTime2 = expect(self.p1 + self.inter_size, node.speed, node.accel) + node.enterTime
+        elif abs(goal[0]) > goal[1] and goal[0] != 0: #right is better
+            node.accel = goal[1]
+            node.requestedAccel = goal[1]
+            node.expectedTime = goal[3] + node.enterTime
+            node.expectedTime2 = expect(self.p1 + self.inter_size, node.speed, node.accel) + node.enterTime
+
+        elif abs(goal[0]) < goal[1] and goal[1] != 0: #left is better
+            node.accel = goal[0]
+            node.requestedAccel = goal[0]
+            node.expectedTime = goal[2] + node.enterTime
+            node.expectedTime2 = expect(self.p1 + self.inter_size, node.speed, node.accel) + node.enterTime
+        else:
+            print "Shit"
+            exit("bad goals")
+
+        return node
 
     def insertBetween(self, spot1, spot2, info):
         new_node = info

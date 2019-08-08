@@ -44,9 +44,9 @@ class Car:
     inter_side_length = IC.Intersection.inter_side_length
     inter_max_speed = IC.Intersection.inter_max_speed  # TODO actually use this....
     inter_tolerance_time = IC.Intersection.inter_tolerance_time  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
-    inter_size = IC.Intersection.inter_size # ex: 10x10m inside
-    p1_distance = -1 * inter_side_length - (inter_size / 2)
-    p2_distance = -1 * inter_side_length + (inter_size / 2)
+    inter_size = IC.Intersection.inter_size  # ex: 20x20m inside
+    p1_distance = -1 * inter_side_length + (inter_size / 2)
+    p2_distance = -1 * inter_side_length - (inter_size / 2)
 
 
     # position
@@ -71,8 +71,8 @@ class Car:
     expectedTime1 = 0  # after seconds update to end
 
     # simulation specs
-    max_time = 60
-    resolution = max_time * 10
+    max_time = 12 #seconds
+    resolution = max_time * 100
 
     # sizing
     width = 0
@@ -102,17 +102,17 @@ class Car:
         # position
         # Assume:  -100:100 X -100:100
         if self.lane == 1:
-            self.posX_OG = 5
-            self.posY_OG = -200
+            self.posX_OG = self.inter_size/2
+            self.posY_OG = -1 * self.inter_side_length
         elif self.lane == 2:
-            self.posX_OG = 200
-            self.posY_OG = 5
+            self.posX_OG = self.inter_side_length
+            self.posY_OG = self.inter_size/2
         elif self.lane == 3:
-            self.posX_OG = -5
-            self.posY_OG = 200
+            self.posX_OG = -1 * self.inter_size/2
+            self.posY_OG = self.inter_side_length
         elif self.lane == 4:
-            self.posX_OG = -200
-            self.posY_OG = -5
+            self.posX_OG = -1 * self.inter_side_length
+            self.posY_OG = -1 * self.inter_size/2
 
 
     def toString(self):
@@ -138,7 +138,10 @@ class Car:
         return path
 
 
+
+
     def piec0XY(self, T):
+
 
         # add in car data
         path = self.vin
@@ -155,6 +158,7 @@ class Car:
 
         # timelines
         time = np.linspace(T, T + self.max_time, self.resolution)
+        print time.size
         realTime = np.linspace(0, T + self.max_time - self.enterTime0, self.resolution)
 
         # place holders
