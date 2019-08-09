@@ -67,7 +67,7 @@ class Intersection:
 
 
     # car criteria
-    car_max_accel = 0.7
+    car_max_accel = 1
 
     car_max_speed = 50
 
@@ -77,6 +77,7 @@ class Intersection:
     inter_max_speed = 20
     inter_tolerance_time = 0.6  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
     p1 = inter_side_length - (inter_size / 2)
+    p2 = inter_side_length + (inter_size / 2)
     # set up
     starTime = 0
 
@@ -87,6 +88,8 @@ class Intersection:
         self.start = 1
         self.head = Reservation(0, 0, 0, 0, n, 0, 0, 0)
         self.tail = Reservation(99, 0, 0, 0, n, 0, 0, 0)
+        self.tail.expectedTime = 2 ** 20
+        self.head.expectedTime = 0
         self.size = 0
         self.starTime = time.time()
         self.name = n
@@ -133,7 +136,7 @@ class Intersection:
             temp = self.head.nextt  # closest
             n = self.head.nextt
             while n is not self.tail:  # loop until reached tail
-                if (abs(n.expectedTime - t) < (abs(temp.expectedTime - t))):
+                if (abs(n.expectedTime - t) <= (abs(temp.expectedTime - t))):
                     temp = n
                 n = n.nextt
             if n is self.tail:
@@ -359,7 +362,7 @@ class Intersection:
 
 
         # generate derivative
-        time = numpy.linspace(0, 20, 15 * 50)   # substiture length to p2 and make a real resolution
+        time = numpy.linspace(0, 8, 15 * 50)   # substiture length to p2 and make a real resolution
 
 
 
@@ -405,8 +408,9 @@ class Intersection:
             tolerance = self.inter_tolerance_time  #TODO change to speed at PX
         """
         tolerance = self.calculateToleranceTime(res, closest)
+        print (abs(res.expectedTime - closest.expectedTime))
 
-        if (abs(res.expectedTime - closest.expectedTime) >= tolerance) and ((res.expectedTime - closest.prev.expectedTime) >= tolerance) and (abs(res.expectedTime - closest.nextt.expectedTime) > tolerance):
+        if (abs(res.expectedTime - closest.expectedTime) >= (tolerance/ 1.1)) and ((res.expectedTime - closest.prev.expectedTime) >= (tolerance / 1.2)) and (abs(res.expectedTime - closest.nextt.expectedTime) > (tolerance / 1.1)):
             if res.expectedTime > closest.expectedTime:
                 return True, closest
             else:
@@ -430,7 +434,7 @@ class Intersection:
         tolerance = self.calculateToleranceTime(res, closest)
 
 
-        if (abs(res.expectedTime2 - closest.expectedTime) > tolerance) and ((res.expectedTime2 - closest.prev.expectedTime) > tolerance) and (abs(res.expectedTime2 - closest.nextt.expectedTime) > tolerance):
+        if (abs(res.expectedTime2 - closest.expectedTime) > (tolerance / 1.1)) and ((res.expectedTime2 - closest.prev.expectedTime) > tolerance) and (abs(res.expectedTime2 - closest.nextt.expectedTime) > tolerance):
             if res.expectedTime2 > closest.expectedTime:
                 return True, closest
             else:
@@ -444,25 +448,30 @@ class Intersection:
     def calculateToleranceTime(self, res, car):
 
         # calculate min speed of res
-        Rescoef = [0.5* res.accel, res.speed, (-1 * self.inter_side_length) - (2 * res.length + car.width)]
-        ResPossibleMinSpeedTime = min(numpy.roots(Rescoef))
-        ResPossibleMinSpeed = res.speed + (res.accel * ResPossibleMinSpeedTime )
-        # TODO: look at range now!!
+        Rescoef = [0.5* res.accel, res.speed, (-1 * (self.p1 + (res.length + car.width)))]
+        ResPossibleMinSpeedTime = min(abs(numpy.roots(Rescoef)))
+        ResPossibleMinSpeed = res.speed + (res.accel * ResPossibleMinSpeedTime )                   #speed that it is going to point of possible contact
+
 
         # calculate min speed of car
-        Carcoef = [0.5 *car.accel, car.speed, (-1 * self.inter_side_length) + (2 * car.length + res.width)]
-        CarPossibleMinSpeedTime =  min(numpy.roots(Carcoef))
+        #check if past P1
+        if car.expectedTime2 == None:
+            Carcoef = [0.5 * car.accel, car.speed, -1 * (self.p2 + (car.length + res.width))]
+        else:
+            Carcoef = [0.5 *car.accel, car.speed, -1 * (self.p1 + (car.length + res.width))]
+
+        CarPossibleMinSpeedTime =  min(abs(numpy.roots(Carcoef)))
         CarPossibleMinSpeed = car.speed + (car.accel * CarPossibleMinSpeedTime)
-        #TODO: look at range now!!
+
 
         # calculate tolerance time1
-        option1 = (res.length / ResPossibleMinSpeed) + (car.width / CarPossibleMinSpeed)
+        option1 = (2.0 * res.width + 2.0 * car.length) / CarPossibleMinSpeed
 
         # calculate tolerance time1
-        option2 = (car.length / CarPossibleMinSpeed) + (res.width / ResPossibleMinSpeed)
+        option2 = (2.0 * car.width + 2.0 * res.length) / ResPossibleMinSpeed
 
         # return max
-        temp = max(option1, option2)
+        temp = max(option1, option2) * 1.1
 
         if temp < 0:
             print temp
@@ -474,8 +483,9 @@ class Intersection:
             exit(99)
 
 
-        print "proposed tolerance: " + str(abs(temp))
-        return abs(max(option1,option2)) * 1.2
+        print "temp: " + str(temp)
+
+        return temp
 
 
 
@@ -497,11 +507,14 @@ class Intersection:
 
             #check for line skipping
             if current_node.lane == res.lane:
-                return self.head
+                return self.head.nextt
 
             if(current_node.expectedTime - res.expectedTime >= t1) and (res.expectedTime - current_node.prev.expectedTime >= t2):
                return current_node
-        return self.head
+            else:
+                current_node = current_node.prev
+
+        return self.head.nextt
 
 
     # find open space to right: (1) size greater than tolerances (2) no line skipping
@@ -522,7 +535,9 @@ class Intersection:
             if (current_node.expectedTime - res.expectedTime >= t1) and (
                     res.expectedTime - current_node.prev.expectedTime >= t2):
                 return current_node
-        return self.tail
+            else:
+                current_node = current_node.nextt
+        return self.tail.prev
 
 
 
@@ -531,7 +546,7 @@ class Intersection:
 
     def calcEnergyNeeded(self, res, lt, rt):  # option1 is left search, option2 is right search
         # compare required energy, return
-        left = res.expectedTime - lt - res.enterTime
+        left = res.expectedTime - res.enterTime - abs(lt)
         leftAccel = ((self.p1 - res.speed * left))/(0.5 * left ** 2)
         if abs(leftAccel) > self.car_max_accel:
             leftAccel = 0
@@ -548,11 +563,14 @@ class Intersection:
         node = res
 
         #find opening to the left
+        print "looking left"
         left = self.find_open_left(node)
+        print "left: " + left.toString()
         leftTime =  left.expectedTime - self.calculateToleranceTime(node, left) - res.expectedTime
 
 
         #find opening to the right
+        print "looking left"
         right = self.find_open_right(node)
         rightTime = right.expectedTime + self.calculateToleranceTime(node, left) - res.expectedTime
 
@@ -569,23 +587,23 @@ class Intersection:
             node.accel = goal[1]
             node.requestedAccel = goal[1]
             node.expectedTime = goal[3] + node.enterTime
-            node.expectedTime2 = expect(self.p1 + self.inter_size, node.speed, node.accel) + node.enterTime
+            node.expectedTime2 = expect(-1 *self.p2, node.speed, node.accel) + node.enterTime
         elif goal[1] == 0: #right does not exist
             node.accel = goal[0]
             node.requestedAccel = goal[0]
             node.expectedTime = goal[2] + node.enterTime
-            node.expectedTime2 = expect(self.p1 + self.inter_size, node.speed, node.accel) + node.enterTime
-        elif abs(goal[0]) > goal[1] and goal[0] != 0: #right is better
+            node.expectedTime2 = expect(-1 * self.p2, node.speed, node.accel) + node.enterTime
+        elif goal[0] > abs(goal[1]) and goal[0] != 0: #right is better
             node.accel = goal[1]
             node.requestedAccel = goal[1]
             node.expectedTime = goal[3] + node.enterTime
-            node.expectedTime2 = expect(self.p1 + self.inter_size, node.speed, node.accel) + node.enterTime
+            node.expectedTime2 = expect(-1 * self.p2, node.speed, node.accel) + node.enterTime
 
-        elif abs(goal[0]) < goal[1] and goal[1] != 0: #left is better
+        elif goal[0] < abs(goal[1]) and goal[1] != 0: #left is better
             node.accel = goal[0]
             node.requestedAccel = goal[0]
             node.expectedTime = goal[2] + node.enterTime
-            node.expectedTime2 = expect(self.p1 + self.inter_size, node.speed, node.accel) + node.enterTime
+            node.expectedTime2 = expect(-1 * self.p2, node.speed, node.accel) + node.enterTime
         else:
             print "Shit"
             exit("bad goals")

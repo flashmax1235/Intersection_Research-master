@@ -74,6 +74,7 @@ class Intersection_Manager:
         while (newNode.set != 1):  # continue looking until reservation is set and safe
             print ("\n\n")
             if self.quads[P1].check_time_and_colision(newNode)[0]:
+
                 print ("P1 open")
                 # check to see if q2 is open
                 q2_status = self.quads[P2].simple_check_time2(newNode)
@@ -103,11 +104,13 @@ class Intersection_Manager:
                     newNode = self.quads[P1].findNextBest(newNode)
             else:
                 self.count = self.count + 1
-                if self.count == 30:
+                if self.count == 100:
+                    print newNode.accel
                     exit(10)
                 print("P1 does not fit")
                 # find next possible time for P1
                 newNode = self.quads[P1].findNextBest(newNode)
+                print "proposing accel of: " + str(newNode.accel)
         return newNode
 
     def quadBooker_RightTurn(self, P1, lane, res):

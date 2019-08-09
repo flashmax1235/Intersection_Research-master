@@ -3,13 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="1e642bdc-0a9b-4c04-9e80-21a41da68513" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Car_Class.py" beforeDir="false" afterPath="$PROJECT_DIR$/Car_Class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Intersection_Class.py" beforeDir="false" afterPath="$PROJECT_DIR$/Intersection_Class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Intersection_Manager_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/Intersection_Manager_class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Java/WS/Simulator_Run/src/driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/Java/WS/Simulator_Run/src/driver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/carData.csv" beforeDir="false" afterPath="$PROJECT_DIR$/carData.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/s" beforeDir="false" afterPath="$PROJECT_DIR$/s" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -189,7 +187,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565216599135</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="sdf">
+      <created>1565303167052</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1565303167052</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -213,9 +218,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Intersection_Manager_class.py</url>
-          <line>105</line>
-          <option name="timeStamp" value="54" />
+          <url>file://$PROJECT_DIR$/Intersection_Class.py</url>
+          <line>581</line>
+          <option name="timeStamp" value="75" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

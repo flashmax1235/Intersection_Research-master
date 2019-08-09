@@ -27,12 +27,11 @@ def getDelay(n, l2):
         dt = dx / (car.speed + car.accel * dt)
     return dt*1.2
 
-"""
 for i in range(5):
     # generate data
     vin = i
     lane = random.randint(1, 4)
-    delay = random.randrange(40, 50, 1) / 60.0
+    delay = random.randrange(40, 60, 1) / 60.0
     speed = random.randrange(900, 1100, 1) / 100.00
     accel = 0#random.randrange(-1, 1, 1) / 10.0
     turn = 0 #random.randint(0, 1)
@@ -52,9 +51,10 @@ for i in range(5):
 
     # copy path data to csv file
     list_car_data.append(test_car.distanceTravelled(manager.starTime))
+
+
+
 """
-
-
 start = time.time()
 # generate data
 vin = 1
@@ -77,19 +77,19 @@ test_car.updateAccel01(manager.addReservation(test_res))
 # copy path data to csv file
 list_car_data.append(test_car.distanceTravelled(manager.starTime))
 
-
+manager.toString()
 
 # generate data
 vin = 2
 lane = 2
 delay = 0
-speed = 10
-accel = 0.0
+speed = 11
+accel = 0
 turn = 0
 lenth = 2.5
 width = 1.5
 # create car
-test_car = CC.Car(vin, speed, accel, start + 0.2, lane, turn, lenth, width)
+test_car = CC.Car(vin, speed, accel, start + 0.3, lane, turn, lenth, width)
 
 # generate a possible reservation
 test_res = IC.Reservation(test_car.vin, test_car.speed, test_car.accel0, test_car.enterTime0, test_car.lane, turn, lenth, width)
@@ -99,20 +99,20 @@ test_car.updateAccel01(manager.addReservation(test_res))
 
 # copy path data to csv file
 list_car_data.append(test_car.distanceTravelled(manager.starTime))
-
-
-"""
+print "\n\n"
+manager.toString()
+print "\n\n"
 # generate data
 vin = 3
 lane = 3
 delay = 0
-speed = 12.0
+speed = 11.0
 accel = 0.0
 turn = 0
 lenth = 2.5
 width = 1.5
 # create car
-test_car = CC.Car(vin, speed, accel, start +0.25, lane, turn, lenth, width)
+test_car = CC.Car(vin, speed, accel, start +0.45, lane, turn, lenth, width)
 
 # generate a possible reservation
 test_res = IC.Reservation(test_car.vin, test_car.speed, test_car.accel0, test_car.enterTime0, test_car.lane, turn, lenth, width)
