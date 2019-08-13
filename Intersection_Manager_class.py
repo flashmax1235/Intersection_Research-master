@@ -21,7 +21,7 @@ class Intersection_Manager:
     count = 0
     #who is going to own this stuff??
     # Intersection Criteria
-    inter_side_length = 50
+    inter_side_length = 75
     inter_size = 10
     inter_max_speed = 20
     inter_tolerance_time = 0.1
@@ -31,10 +31,10 @@ class Intersection_Manager:
 
 
     def __init__(self):
-        self.q1 = IC.Intersection(1)
-        self.q2 = IC.Intersection(2)
-        self.q3 = IC.Intersection(3)
-        self.q4 = IC.Intersection(4)
+        self.q1 = IC.Intersection(0)
+        self.q2 = IC.Intersection(1)
+        self.q3 = IC.Intersection(2)
+        self.q4 = IC.Intersection(3)
         self.quads.append(self.q1)
         self.quads.append(self.q2)
         self.quads.append(self.q3)
@@ -104,7 +104,7 @@ class Intersection_Manager:
                     newNode = self.quads[P1].findNextBest(newNode)
             else:
                 self.count = self.count + 1
-                if self.count == 100:
+                if self.count == 15:
                     print newNode.accel
                     exit(10)
                 print("P1 does not fit")
