@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1e642bdc-0a9b-4c04-9e80-21a41da68513" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Intersection_Class.py" beforeDir="false" afterPath="$PROJECT_DIR$/Intersection_Class.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Intersection_Manager_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/Intersection_Manager_class.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Java/WS/Simulator_Run/src/driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/Java/WS/Simulator_Run/src/driver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/carData.csv" beforeDir="false" afterPath="$PROJECT_DIR$/carData.csv" afterDir="false" />
-    </list>
+    <list default="true" id="1e642bdc-0a9b-4c04-9e80-21a41da68513" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,7 +194,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565393931784</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="sdf">
+      <created>1565736570667</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1565736570667</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
