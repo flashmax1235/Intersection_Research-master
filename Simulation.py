@@ -9,41 +9,28 @@ import numpy as np
 
 manager = IMC.Intersection_Manager()
 list_car_data = []
-
-def findCarInfront(n):
-    current = manager.quads[n-1].tail.prev
-    while current.lane != n:
-        current = current.prev
-    return current
-
-def getDelay(n, l2):
-    car = findCarInfront(n)
-    if car.length == 0:
-        return 0
-
-    dx = (car.length + l2) * 1.5
-    dt =dx / car.speed
-    for i in range (5):
-        dt = dx / (car.speed + car.accel * dt)
-    return dt*1.2
+pastLane = None
+startTime = 0
 
 
-
-for i in range(15):
+for i in range(25):
     # generate data
     vin = i
     lane = random.randint(1, 4)
-    delay = random.randrange(30, 35, 1) / 60.0
+    delay = random.randrange(50, 60, 1)
     speed = random.randrange(3400, 3600, 1) / 100.00
     accel = 0#random.randrange(-1, 1, 1) / 10.0
     turn = 0 #random.randint(0, 1)
-    lenth = 2.5
-    width = 1.5
-    #time.sleep(getDelay(lane, lenth))
-    time.sleep(delay)
+    lenth = random.randrange(20, 30, 1) / 10.0
+    width = random.randrange(10, 20, 1) / 10.0
+
+    if pastLane == lane:
+        delay = 80
+    startTime = startTime + delay
+    pastLane = lane
 
     # create car
-    test_car = CC.Car(vin, speed, accel, time.time(), lane, turn, lenth, width)
+    test_car = CC.Car(vin, speed, accel, startTime, lane, turn, lenth, width)
 
     # generate a possible reservation
     test_res = IC.Reservation(test_car.vin, test_car.speed, test_car.accel0, test_car.enterTime0, test_car.lane, turn, test_car.length, test_car.width)
@@ -52,7 +39,7 @@ for i in range(15):
     test_car.updateAccel01(manager.addReservation(test_res))
 
     # copy path data to csv file
-    list_car_data.append(test_car.distanceTravelled(manager.starTime))
+    list_car_data.append(test_car.distanceTravelled(0))
 
 
 

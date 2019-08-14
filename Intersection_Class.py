@@ -14,7 +14,7 @@ def expect(c, b, a):
     d = (b ** 2) - (4.0 * a * c)
     # find two solutions
     sol1 = (-b - cmath.sqrt(d)) / (2.0 * a)
-    sol2 = (-b + cmath.sqrt(d)) / (2.0 * a)
+    sol2 = round(abs(((-b + cmath.sqrt(d)) / (2.0 * a))), 2)
     #print('The solution are {0} and {1}'.format(sol1, sol2.__abs__()))
     return sol2.__abs__()
 
@@ -28,8 +28,9 @@ class Reservation:
 
         # used for search
         self.originalAccel = accel
-        self.OriginalExpectedTime = enterTime + expect(IMC.Intersection_Manager.p1_distance, self.speed, self.originalAccel)  # to middle of first qm  , changed to enter tom from time()
-        self.OriginalExpectedTime2 = enterTime + expect(IMC.Intersection_Manager.p2_distance, self.speed, self.originalAccel)
+
+        self.OriginalExpectedTime = int(enterTime + expect(IMC.Intersection_Manager.p1_distance, self.speed, self.originalAccel) * 100)  # to middle of first qm  , changed to enter tom from time()
+        self.OriginalExpectedTime2 = int(enterTime + expect(IMC.Intersection_Manager.p2_distance, self.speed, self.originalAccel) * 100)
         self.edgeOfSearch = 0.0
 
 
@@ -38,8 +39,8 @@ class Reservation:
         self.enter = 0  # 0 if entering -- 1 if exiting
 
         self.enterTime = enterTime
-        self.expectedTime = enterTime + expect(IMC.Intersection_Manager.p1_distance, self.speed, self.accel) # to middle of first qm  , changed to enter tom from time()
-        self.expectedTime2 = enterTime + expect(IMC.Intersection_Manager.p2_distance, self.speed, self.accel)
+        self.expectedTime = int(enterTime + expect(IMC.Intersection_Manager.p1_distance, self.speed, self.accel) * 100)  # to middle of first qm  , changed to enter tom from time()
+        self.expectedTime2 = int(enterTime + expect(IMC.Intersection_Manager.p2_distance, self.speed, self.accel) * 100)
 
 
         self.nextt = None
@@ -73,11 +74,11 @@ class Intersection:
     # car criteria
     car_max_accel = 8
 
-    car_max_speed = 75
+    car_max_speed = 125
 
     # Intersection Criteria
-    inter_side_length = 75
-    inter_size = 10
+    inter_side_length = 200
+    inter_size = 20
     inter_max_speed = 20
     inter_tolerance_time = 0.6  # intersection_side_length/[(max_Speed + min_speed)/2] (0.12s)  ---only 1 car in an in
     p1 = inter_side_length - (inter_size / 2)
@@ -87,6 +88,9 @@ class Intersection:
 
     #useful for manager
     name = ""
+
+    #colision detection
+    timeLength = 7
 
     def __init__(self,n):
         self.start = 1
@@ -234,11 +238,11 @@ class Intersection:
     def check_colision(self, res, car):
 
         print "using accel value: " + str(res.accel)
-        tolerance =  (res.length + car.length) *1.1 #meters #calculate tolerance based on size
+        tolerance =  (res.length + car.length) * 1.1 #meters #calculate tolerance based on size
 
 
         #difference in enter time
-        deltaT = res.enterTime - car.enterTime
+        deltaT = (res.enterTime - car.enterTime) / 100.0
 
         #calculate separation at deltaT
         seperation = (car.speed * deltaT) + (0.5 * car.accel * deltaT ** 2)
@@ -249,7 +253,7 @@ class Intersection:
 
 
         # generate derivative
-        time = numpy.linspace(0, 5, 5 * 100)   # substiture length to p2 and make a real resolution
+        time = numpy.linspace(0, self.timeLength, self.timeLength * 100)   # substiture length to p2 and make a real resolution
 
 
 
@@ -267,15 +271,6 @@ class Intersection:
             return True
 
 
-
-        """
-        efficient way
-        derivative = []
-
-        for val in time:
-            data = (car.speed + car.accel * (val + deltaT)) - (res.speed + res.accel * val)
-            print data
-        """
 
 
 
@@ -373,7 +368,7 @@ class Intersection:
         option2 = (2.0 * car.width + 2.0 * res.length) / ResPossibleMinSpeed
 
         # return max
-        temp = max(option1, option2) * 1.1
+        temp = (max(option1, option2) * 1.1) * 100
 
         if temp > 0:
             print "good"
@@ -431,7 +426,7 @@ class Intersection:
         option2 = (2.0 * car.width + 2.0 * res.length) /  realCarMinSpeed
 
         # return max
-        temp = max(option1, option2) * 1.2
+        temp = (max(option1, option2) * 1.2) * 100
 
         if temp < 0:
             print temp
@@ -467,7 +462,7 @@ class Intersection:
             if current_node.lane == res.lane: # no line skipping
                 return None, False
 
-            if(current_node.expectedTime - res.expectedTime >= t1) and (res.expectedTime - current_node.prev.expectedTime >= t2) and (abs(current_node.expectedTime -t1 - res.OriginalExpectedTime) > res.esedgeOfSearch):
+            if(current_node.expectedTime - res.expectedTime >= t1) and (res.expectedTime - current_node.prev.expectedTime >= t2) and (abs(current_node.expectedTime -t1 - res.OriginalExpectedTime) > res.edgeOfSearch):
                     return current_node.expectedTime - self.calculateToleranceTime(current_node, res), True
             else:
                 current_node = current_node.prev
@@ -510,7 +505,7 @@ class Intersection:
     def calcEnergyNeeded(self, res, lt, rt):  # option1 is left search, option2 is right search
         # compare required energy, return
         if lt != None:
-            left = res.expectedTime - res.enterTime - abs(lt)
+            left = int(res.expectedTime - res.enterTime - abs(lt))
             leftAccel = ((self.p1 - res.speed * left))/(0.5 * left ** 2)
             if abs(leftAccel) > self.car_max_accel:
                 leftAccel = None
@@ -518,7 +513,7 @@ class Intersection:
             left = None
             leftAccel = None #TODO: change to none
 
-        right = res.expectedTime + rt - res.enterTime
+        right = int(res.expectedTime + rt - res.enterTime)
         rightAccel = ((self.p1 - res.speed * right)) / (0.5 * right ** 2)
         if abs(rightAccel) > self.car_max_accel:
             rightAccel = None
@@ -551,25 +546,25 @@ class Intersection:
             node.accel = goal[1]
             node.requestedAccel = goal[1]
             node.expectedTime = goal[3] + node.enterTime
-            node.expectedTime2 = expect(-1 *self.p2, node.speed, node.accel) + node.enterTime
+            node.expectedTime2 = expect(-1 *self.p2, node.speed, node.accel) * 100 + node.enterTime
             node.edgeOfSearch = abs(node.expectedTime - node.OriginalExpectedTime)
         elif goal[1] == None: #right does not exist
             node.accel = goal[0]
             node.requestedAccel = goal[0]
             node.expectedTime = goal[2] + node.enterTime
-            node.expectedTime2 = expect(-1 * self.p2, node.speed, node.accel) + node.enterTime
+            node.expectedTime2 = expect(-1 * self.p2, node.speed, node.accel) * 100 + node.enterTime
             node.edgeOfSearch = abs(node.expectedTime - node.OriginalExpectedTime)
         elif goal[0] > abs(goal[1]) and goal[0] != 0: #right is better
             node.accel = goal[1]
             node.requestedAccel = goal[1]
             node.expectedTime = goal[3] + node.enterTime
-            node.expectedTime2 = expect(-1 * self.p2, node.speed, node.accel) + node.enterTime
+            node.expectedTime2 = expect(-1 * self.p2, node.speed, node.accel)* 100 + node.enterTime
             node.edgeOfSearch = abs(node.expectedTime - node.OriginalExpectedTime)
         elif goal[0] < abs(goal[1]) and goal[1] != 0: #left is better
             node.accel = goal[0]
             node.requestedAccel = goal[0]
             node.expectedTime = goal[2] + node.enterTime
-            node.expectedTime2 = expect(-1 * self.p2, node.speed, node.accel) + node.enterTime
+            node.expectedTime2 = expect(-1 * self.p2, node.speed, node.accel) * 100 + node.enterTime
             node.edgeOfSearch = abs(node.expectedTime - node.OriginalExpectedTime)
         else:
             print "Shit"

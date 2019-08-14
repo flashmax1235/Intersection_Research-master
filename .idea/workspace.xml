@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1e642bdc-0a9b-4c04-9e80-21a41da68513" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Car_Class.py" beforeDir="false" afterPath="$PROJECT_DIR$/Car_Class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Intersection_Class.py" beforeDir="false" afterPath="$PROJECT_DIR$/Intersection_Class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Intersection_Manager_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/Intersection_Manager_class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Java/WS/Simulator_Run/src/driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/Java/WS/Simulator_Run/src/driver.java" afterDir="false" />
@@ -23,16 +24,32 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>one</find>
+      <find>expectedTime</find>
+      <find>newNode.set</find>
+      <find>shit n</find>
+      <find>find_open_right_al</find>
+      <find>check_avalability_time</find>
+      <find>expect(</find>
+      <find>QUAD</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
-  <component name="ProjectId" id="1P3gsnpHlPCpEwdtxUbKBSfhBS9" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="61" />
+    <option name="y" value="-4" />
+    <option name="width" value="1683" />
+    <option name="height" value="1054" />
+  </component>
+  <component name="ProjectId" id="1POERwg1dtiMJPQf9xK3piis10Q" />
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="restartRequiresConfirmation" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Intersection_Manager_class_2.py" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -180,28 +197,7 @@
       <option name="project" value="LOCAL" />
       <updated>1563394739433</updated>
     </task>
-    <task id="LOCAL-00002" summary="sdf">
-      <created>1565216599135</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1565216599135</updated>
-    </task>
-    <task id="LOCAL-00003" summary="sdf">
-      <created>1565303167052</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1565303167052</updated>
-    </task>
-    <task id="LOCAL-00004" summary="sdf">
-      <created>1565393931784</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1565393931784</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -209,9 +205,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -225,14 +219,19 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Intersection_Class.py</url>
-          <line>379</line>
-          <option name="timeStamp" value="117" />
+          <url>file://$PROJECT_DIR$/Car_Class.py</url>
+          <line>179</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Car_Class.py</url>
+          <line>204</line>
+          <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Intersection_Class.py</url>
-          <line>436</line>
-          <option name="timeStamp" value="118" />
+          <line>464</line>
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

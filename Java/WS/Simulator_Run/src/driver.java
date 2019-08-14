@@ -58,10 +58,12 @@ public class driver {
 	public static void main(String[] args) throws InterruptedException {
 
 		// compile python sim;
-		Draw map = new Draw();
-		map.setCanvasSize(400,400);
-		map.setXscale(-75, 75);
-		map.setYscale(-75, 75);
+		int InterSize = 200;
+		int InterSquare = 20;
+		//Draw map = new Draw();
+		//map.setCanvasSize(400,400);
+		//map.setXscale(-InterSize, InterSize);
+		//map.setYscale(-InterSize, InterSize);
 
 		// variables
 
@@ -69,8 +71,10 @@ public class driver {
 		int lane;
 		double w;
 		double l;
+		
 		BufferedImage img;
 		Graphics2D g2;
+		
 		Point2D pos = new Point2D.Double();
 		ArrayList<Rectangle> cars = new ArrayList<Rectangle>();
 
@@ -85,13 +89,14 @@ public class driver {
 		String thisLine;
 
 		// simulation parameters
-		long timeStep = 50 / (100);
+		long timeStep = 1;
 		System.out.print(timeStep);
-		int frames = ((12 * 100 * 2) + 4) - 1;
+		int frames = ((20 * 100 * 2) + 4) - 1;
 
 		img = new BufferedImage(150, 150, BufferedImage.TYPE_INT_RGB);
 		g2 = (Graphics2D) img.getGraphics();
 		JFrame theWindow = new JFrame("Simulation");
+		theWindow.setVisible(true);
 
 		try {
 			Scanner scanner = new Scanner(file);
@@ -99,14 +104,14 @@ public class driver {
 			for (int i = 2; i < frames; i = i + 2) {
 
 				// TimeUnit.SECONDS.sleep(timeStep);
-				TimeUnit.MILLISECONDS.sleep(timeStep * 2);
-				map.clear();
+				TimeUnit.MICROSECONDS.sleep(timeStep);
+				//map.clear();
 
-				map.square(-5, -5, 2.5);
+				//map.square(-InterSquare/2, -InterSquare/2, InterSquare/2);
 
-				map.square(5, -5, 2.5);
-				map.square(5, 5 , 2.5);
-				 map.square(-5, 5, 2.5);
+				//map.square(InterSquare/2, -InterSquare/2, InterSquare/2);
+				//map.square(InterSquare/2, InterSquare/2 , InterSquare/2);
+				//map.square(-InterSquare/2, InterSquare/2, InterSquare/2);
 
 				while (scanner.hasNextLine()) { // iterte through row
 					thisLine = scanner.nextLine();
@@ -123,17 +128,17 @@ public class driver {
 						// Double.parseDouble(thisLines[i+1]) );
 						pos.setLocation(Double.parseDouble(thisLines[i]), Double.parseDouble(thisLines[i + 1]));
 					}
-					if ((pos.getX() == 5 && pos.getY() == -75) || (pos.getX() == 75 && pos.getY() == 5)
+					if ((pos.getX() == 10 && pos.getY() == -75) || (pos.getX() == 75 && pos.getY() == 5)
 							|| (pos.getX() == -5 && pos.getY() == 75) || (pos.getX() == -75 && pos.getY() == 5)
 							|| (pos.getX() == 0 && pos.getY() == 0)) {
 
 					} else {
-						//g2.setColor(new Color((vin * 15) % 256, (vin * 7) % 256, (vin * 99) % 256));
-						//g2.fillRect((int) pos.getX(), (int) pos.getY(), (int) w, (int) l);
-						//g2.drawImage(img, 0, 0, null);
+						g2.setColor(new Color((vin * 15) % 256, (vin * 7) % 256, (vin * 99) % 256));
+						g2.fillRect((int) pos.getX(), (int) pos.getY(), (int) w, (int) l);
+						g2.drawImage(img, 0, 0, null);
 
-						map.setPenColor((vin * 15) % 256, (vin * 7) % 256, (vin * 99) % 256);
-						map.filledRectangle(pos.getX(), pos.getY(), w, l);
+						//map.setPenColor((vin * 15) % 256, (vin * 7) % 256, (vin * 99) % 256);
+						//map.filledRectangle(pos.getX(), pos.getY(), w, l);
 
 						// add acar
 						Point l1 = new Point(pos.getX() - w, pos.getY() + l);
@@ -145,6 +150,7 @@ public class driver {
 					}
 
 				}
+				theWindow.paint(g2);
 				g2.clearRect(0, 0, 75, 75);
 
 				scanner = new Scanner(file);
@@ -160,6 +166,7 @@ public class driver {
 
 				// delete all cars
 				cars.clear();
+				
 
 			}
 			scanner.close();
