@@ -187,7 +187,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565807103040</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="adding outro and classes needed">
+      <created>1565895421531</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1565895421531</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -206,20 +213,26 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="sdf" />
     <MESSAGE value="working straight&#10;discreet Time!&#10;graphics for left and right turn" />
-    <option name="LAST_COMMIT_MESSAGE" value="working straight&#10;discreet Time!&#10;graphics for left and right turn" />
+    <MESSAGE value="adding outro and classes needed" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding outro and classes needed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Intersection_Class.py</url>
-          <line>520</line>
-          <option name="timeStamp" value="38" />
+          <url>file://$PROJECT_DIR$/Car_Class.py</url>
+          <line>239</line>
+          <option name="timeStamp" value="79" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Simulation.py</url>
-          <line>128</line>
-          <option name="timeStamp" value="54" />
+          <url>file://$PROJECT_DIR$/Car_Class.py</url>
+          <line>153</line>
+          <option name="timeStamp" value="80" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Intersection_Class.py</url>
+          <line>515</line>
+          <option name="timeStamp" value="81" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -59,10 +59,14 @@ class Reservation:
 
 
         #outro data
+
+        #TODO:sloppy
         self.endSpeed = 0.0
+        self.updateSpeed()
+
         self.z = 2500
-        self.zMax = 25000
-        self.t1 = self.enterTime + self.z
+        self.zMax = 2500
+        self.t1 = self.expectedTime2 + self.z
         self.OutAccel = 0.0
 
     def updateZ(self,zed):
@@ -509,7 +513,7 @@ class Intersection:
 
         # search found nothing, generate a res -0.1 seconds to the left of head.next and tolerance  (res.esedgeOfSearch - self.calculateToleranceTime(self.head.nextt, res))
         t = self.calculateToleranceTime(self.tail.prev, res)
-        tolerance = max(res.edgeOfSearch + 0.1, abs(res.OriginalExpectedTime - self.tail.prev.expectedTime - t ))  # whats bigger? edge OR neccisary border between head.next and res
+        tolerance = max(res.edgeOfSearch + 10, abs(res.OriginalExpectedTime - self.tail.prev.expectedTime - t ))  # whats bigger? edge OR neccisary border between head.next and res
         expected = res.expectedTime + tolerance
         return expected
 

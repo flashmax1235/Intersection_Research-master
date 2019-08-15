@@ -51,6 +51,7 @@ class Car:
     expectedTime01 = 0  # after first update, time at P2
     t1 = 0  # after seconds update to end
     distanceAtT1 = -1
+    endSpeed = 0
 
     # simulation specs
     max_time = 2000  #miliseconds
@@ -112,6 +113,7 @@ class Car:
     def updateAccel01(self, a):
         self.accel01 = self.accel01 + a[0]
         self.expectedTime01 = a[1]
+        self.endSpeed = self.speed + (self.accel01 * (self.expectedTime01 - self.enterTime0)/1000.0)
 
     def updateAccel1(self, a):
         self.accel1 = a[0]
@@ -122,9 +124,6 @@ class Car:
     def updateExpectedTime01(self, t):
         self.expectedTime01 = t
 
-    def distanceTravelled(self, T):
-        path = self.piec0XY(T)
-        return path
 
 ################################
     def distanceTravelledTime(self, t):
@@ -152,17 +151,17 @@ class Car:
                 if abs(delta) >= abs(self.p1_distance):
                     if self.turn == 1:
                         self.posY = self.inter_size / 2
-                        self.posX = self.posX_OG + (delta - self.p1_distance)
+                        self.posX = self.posX_OG - (delta + self.p1_distance)
                     elif self.turn == 2 and (abs(delta) >= abs(self.p2_distance)):
                         self.posY = -self.inter_size / 2
                         self.posX = self.posX_OG - (delta - self.p2_distance)
                     else:
                         self.posX = self.posX_OG
-                        self.posY = self.posY_OG + delta
+                        self.posY = self.posY_OG - delta
 
                 else:
                     self.posX = self.posX_OG
-                    self.posY = self.posY_OG + delta
+                    self.posY = self.posY_OG - delta
             elif (self.lane == 2):
                 if abs(delta) >= abs(self.p1_distance):
                     if self.turn == 1:
@@ -225,123 +224,7 @@ class Car:
 #################################
 
 
-    def piec0XY(self, T):
 
-
-        # add in car data
-        path = self.vin
-        path = np.append(path, self.lane)
-
-        # add in car dimention
-        if (self.lane % 2 == 1):
-            path = np.append(path, self.length)
-            path = np.append(path, self.width)
-        else:
-            path = np.append(path, self.width)
-            path = np.append(path, self.length)
-
-
-        # timelines
-        time = np.linspace(T, T + self.max_time, self.resolution)
-        print time.size
-        realTime = np.linspace(0, T + self.max_time - self.enterTime0, self.resolution)
-
-        # place holders
-        countX = 0
-        countY = 0
-        delta = 0
-
-
-        for inx, val in enumerate(time):
-           #vert
-            if (val < self.enterTime0): # car not started yet
-                countX = countX + 1
-            else:
-                if (self.lane == 1):   # vericle lanes
-                    # get distance travelled
-                    delta = self.trajectory01((realTime[inx - countX]) / 100, 0)
-
-                    #check for turn
-                    if abs(delta) >= abs(self.p1_distance):
-                        if self.turn == 1:
-                            self.posY = -1 * self.inter_size/2
-                            self.posX = self.posX_OG + (delta + self.p1_distance)
-                        elif self.turn == 2 and (abs(delta) >= abs(self.p2_distance)):
-                            self.posY =  self.inter_size / 2
-                            self.posX = self.posX_OG - (delta + self.p2_distance)
-                        else:
-                            self.posX = self.posX_OG
-                            self.posY = self.posY_OG + delta
-
-                    else:
-                        self.posX = self.posX_OG
-                        self.posY = self.posY_OG + delta
-
-                elif(self.lane == 3):
-                    # get distance travelled
-                    delta = self.trajectory01(realTime[inx - countX] / 100, 0) * -1
-
-                    # check for turn
-                    if abs(delta) >= abs(self.p1_distance):
-                        if self.turn == 1:
-                            self.posY = self.inter_size / 2
-                            self.posX = self.posX_OG + (delta - self.p1_distance)
-                        elif self.turn == 2 and (abs(delta) >= abs(self.p2_distance)):
-                            self.posY = -self.inter_size / 2
-                            self.posX = self.posX_OG - (delta - self.p2_distance)
-                        else:
-                            self.posX = self.posX_OG
-                            self.posY = self.posY_OG + delta
-
-                    else:
-                        self.posX = self.posX_OG
-                        self.posY = self.posY_OG + delta
-
-
-                elif(self.lane == 2):
-                    # get distance travelled
-                    delta = self.trajectory01(realTime[inx - countX] / 100, 0)
-
-                    if abs(delta) >= abs(self.p1_distance):
-                        if self.turn == 1:
-                            self.posX = self.inter_size / 2
-                            self.posY = self.posY_OG + (delta + self.p1_distance)
-                        elif self.turn == 2 and (abs(delta) >= abs(self.p2_distance)):
-                            self.posX = -self.inter_size / 2
-                            self.posY = self.posY_OG - (delta + self.p2_distance)
-                        else:
-                            self.posY = self.posY_OG
-                            self.posX = self.posX_OG - delta
-
-                    else:
-                        self.posY = self.posY_OG
-                        self.posX = self.posX_OG - delta
-
-                elif (self.lane == 4):
-                    # get distance travelled
-                    delta = self.trajectory01(realTime[inx - countX] / 100 , 0)
-
-                    if abs(delta) >= abs(self.p1_distance):
-                        if self.turn == 1:
-                            self.posX = -self.inter_size / 2
-                            self.posY = self.posY_OG - (delta + self.p1_distance)
-                        elif self.turn == 2 and (abs(delta) >= abs(self.p2_distance)):
-                            self.posX = self.inter_size / 2
-                            self.posY = self.posY_OG + (delta + self.p2_distance)
-                        else:
-                            self.posY = self.posY_OG
-                            self.posX = self.posX_OG + delta
-
-                    else:
-                        self.posY = self.posY_OG
-                        self.posX = self.posX_OG + delta
-                else:
-                    print"horizontal"
-
-            path = np.append(path, self.posX)
-            path = np.append(path, self.posY)
-
-        return path
 
 
 
@@ -349,17 +232,16 @@ class Car:
         return pos + (self.speed * time) + (0.5 * self.accel0 * (time ** 2))
 
     def trajectory01(self, time, pos):
-        if(time >= (self.t1/1000.0)):
-            return self.distanceAtT1 + (35.0 * ((time - self.t1) / 1000.0))
-        else:
+
+        if(time >= ((self.t1 - self.enterTime0)/1000.0)) and (self.t1 != 0):  #end
+            dt = time - ((self.t1 - self.enterTime0)/1000.0)
+            return self.distanceAtT1 + (35.0 * dt)
+        elif ((time > ((self.expectedTime01 - self.enterTime0)/1000.0)) and (time < (self.t1/1000.0))):  #middle
+            dt = time - ((self.expectedTime01 - self.enterTime0)/1000.0)
+            return abs(self.p2_distance) + (self.endSpeed * dt) + (0.5 * self.accel1 * (dt ** 2))
+        else:                                                                       #begining
             return pos + (self.speed * time) + (0.5 * self.accel01 * (time ** 2))
 
     def trajectory01_turn(self,time, pos, right):
         print "turn"
 
-
-"""
-test = Car(0, 0, 1.0, time.time(), 2)
-print test.toString()
-test.distanceTravelled()
-"""

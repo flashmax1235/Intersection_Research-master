@@ -11,8 +11,8 @@ manager = IMC.Intersection_Manager()
 list_car_data = []
 pastLane = None
 startTime = 0
-timeLimit = 20 #seconds
-numberOfCars = 1
+timeLimit = 50 #seconds
+numberOfCars = 15
 speedLimit = 35
 maxSpeed = 40 # not used
 minSpeed = 20 # not used
@@ -42,11 +42,11 @@ cars = []
 for i in range(numberOfCars):
     # generate data
     vin = i
-    lane = random.randint(1, 1)
+    lane = random.randint(1, 4)
     delay = random.randrange(500, 600, 1)
-    speed = 20#random.randrange(3400, 3600, 1) / 100.00
-    accel = 0.2
-    turn = 0 #random.randint(0, 1)
+    speed = random.randrange(3000, 3100, 1) / 100.00
+    accel = random.randrange(-20, 20, 1) / 100.0
+    turn = random.randint(0, 1)
     lenth = random.randrange(20, 30, 1) / 10.0
     width = random.randrange(10, 20, 1) / 10.0
 
@@ -122,16 +122,16 @@ while (currentTime < timeLimit * 1000):
     for C in cars:
         #check if completed p2  (combine these two checks please)
         if C.expectedTime01 <= currentTime and C.set == 0:  #
-            print "needs new accel value"
+            #print "needs new accel value"
             C.set = 1
 
             C.updateAccel1(manager.bookOutro(C.generatereservationOUT()))
             print C.distanceTravelledTime(currentTime)
         #check for done with interection
 
-
-        positionsX.append(C.distanceTravelledTime(currentTime)[0])
-        positionsY.append(C.distanceTravelledTime(currentTime)[1])
+        delta = C.distanceTravelledTime(currentTime)
+        positionsX.append(delta[0])
+        positionsY.append(delta[1])
     addLine(positionsX)
     addLine(positionsY)
     positionsX = []

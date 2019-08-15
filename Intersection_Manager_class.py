@@ -157,28 +157,29 @@ class Intersection_Manager:
                 #print "proposing accel of: " + str(newNode.accel)
         return newNode
 
-
+    def quadBooker_LeftTurn(self, P1, P2, P3, res):
+       return "umm"
 
     def bookOutro(self, res):
         newNode = None
         if res.lane == 1:
             if res.turn == 1:
-                newNode = 0
+                newNode = self.findOutro(res, 4)
             else:
                 newNode = self.findOutro(res, 5)
         elif res.lane == 2:
             if res.turn == 1:
-                newNode = 0
+                newNode = self.findOutro(res, 5)
             else:
                 newNode = self.findOutro(res, 6)
         elif res.lane == 3:
             if res.turn == 1:
-                newNode = 0
+                newNode = self.findOutro(res, 6)
             else:
                 newNode = self.findOutro(res, 7)
         elif res.lane == 4:
             if res.turn == 1:
-                newNode = 0
+                newNode = self.findOutro(res, 7)
             else:
                 newNode = self.findOutro(res, 4)
         else:
@@ -199,29 +200,27 @@ class Intersection_Manager:
             #list is empty assign max Z
             maxZ = 2500
             newNode.updateZ(maxZ)
+            self.quads[PEND].insertBetween(inFront, inFront.nextt, newNode)
         else:
             #find maxZ
             maxZ = self.getZmax(newNode, inFront)
-
-        print newNode.OutAccel
-        print newNode.t1
+            newNode.updateZ(maxZ)
+            self.quads[PEND].insertBetween(inFront, inFront.nextt, newNode)
         return newNode
 
 
-
-
-
     def distAtT1(self, res):
-        return (res.speed * res.z) + (0.50 * res.accel * (res.z ** 2))
+        dt = (res.t1 - res.expectedTime2) / 1000.0
+        a =  abs(self.p2_distance) + (res.endSpeed * dt) + (0.5 * res.OutAccel * dt ** 2)
+        return a
 
     def car_dist(self, res, t):
 
         # if in adjusting period
         if(t  <= res.t1):
-            return (res.speed * (t - res.enterTime)) + (0.50 * res.adjustAccel * (t - res.enterTime) ** 2)
+            return (res.speed * (t - res.enterTime)) + (0.50 * res.accel * (t - res.enterTime) ** 2)
         else: #in main loop
-            return  (Intersection_Manager.inter_nom_speed * (t - res.t1)) + self.distAtT1(res)
-
+            return  (35.0 * ((t - res.t1) / 1000.0)) + self.distAtT1(res)
 
     # calcualtes max Z value
     # Thanks Webster
@@ -251,24 +250,17 @@ class Intersection_Manager:
                 exit()
         return res.z
 
-
-
-
     def T1Seperation(self, res, close):
         print("comparing t1 distance with: " + str(close.vin))
         backCar_t1_dist = abs(self.distAtT1(res))  # distance new car (car2) travlled by proposed t1
-        frontCar_t1_dist = abs(self.car_dist(close, (close.t1)))  # distance in front car (car1) travlled by the time car2 reaches t2
-        # print ("front: " + str(frontCar_t1_dist))
-        # print ("back: " + str(backCar_t1_dist))
-        # print(frontCar_t1_dist - backCar_t1_dist)
-
-        # at begining of backcar
-        alt_backCar_t1_dist = 0
-        alt_frontCar_t1_dist = abs(self.car_dist(close, (res.enterTime)))
+        frontCar_t1_dist = abs(self.car_dist(close, (res.t1)))  # distance in front car (car1) travlled by the time car2 reaches t2
 
 
 
-        return min(frontCar_t1_dist - backCar_t1_dist, alt_frontCar_t1_dist - alt_backCar_t1_dist)
+        #TODO:...
+        #check begining??
+
+        return frontCar_t1_dist - backCar_t1_dist
 
 
 

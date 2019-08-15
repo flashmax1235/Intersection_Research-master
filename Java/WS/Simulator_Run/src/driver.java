@@ -71,8 +71,7 @@ public class driver {
 		int lane;
 		double w;
 		double l;
-		int numberOfCars = 1;
-
+		int numberOfCars = 15;
 		Point2D pos = new Point2D.Double();
 		ArrayList<Rectangle> cars = new ArrayList<Rectangle>();
 
