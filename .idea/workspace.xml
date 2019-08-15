@@ -24,32 +24,15 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>one</find>
-      <find>expectedTime</find>
-      <find>newNode.set</find>
-      <find>shit n</find>
-      <find>find_open_right_al</find>
-      <find>check_avalability_time</find>
-      <find>expect(</find>
-      <find>QUAD</find>
-    </findStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="61" />
-    <option name="y" value="-4" />
-    <option name="width" value="1683" />
-    <option name="height" value="1054" />
-  </component>
   <component name="ProjectId" id="1POERwg1dtiMJPQf9xK3piis10Q" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Intersection_Manager_class_2.py" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Intersection_Research-NominalSpeedDependent" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -197,7 +180,14 @@
       <option name="project" value="LOCAL" />
       <updated>1563394739433</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="working straight&#10;discreet Time!&#10;graphics for left and right turn">
+      <created>1565807103040</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1565807103040</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -205,7 +195,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
@@ -213,25 +205,21 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="sdf" />
-    <option name="LAST_COMMIT_MESSAGE" value="sdf" />
+    <MESSAGE value="working straight&#10;discreet Time!&#10;graphics for left and right turn" />
+    <option name="LAST_COMMIT_MESSAGE" value="working straight&#10;discreet Time!&#10;graphics for left and right turn" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Car_Class.py</url>
-          <line>179</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Car_Class.py</url>
-          <line>204</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Intersection_Class.py</url>
-          <line>464</line>
-          <option name="timeStamp" value="24" />
+          <line>520</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Simulation.py</url>
+          <line>128</line>
+          <option name="timeStamp" value="54" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

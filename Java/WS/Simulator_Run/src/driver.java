@@ -55,128 +55,116 @@ class Rectangle {
 
 public class driver {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
 		// compile python sim;
 		int InterSize = 200;
 		int InterSquare = 20;
-		//Draw map = new Draw();
-		//map.setCanvasSize(400,400);
-		//map.setXscale(-InterSize, InterSize);
-		//map.setYscale(-InterSize, InterSize);
+
+		Draw map = new Draw();
+		map.setCanvasSize(400, 400);
+		map.setXscale(-InterSize, InterSize);
+		map.setYscale(-InterSize, InterSize);
 
 		// variables
-
-		int vin; // also corisponds to line#
+		int vin;
 		int lane;
 		double w;
 		double l;
-		
-		BufferedImage img;
-		Graphics2D g2;
-		
+		int numberOfCars = 1;
+
 		Point2D pos = new Point2D.Double();
 		ArrayList<Rectangle> cars = new ArrayList<Rectangle>();
 
 		// Location of file to read
 		File file = new File("/home/maxwell/Documents/Scripts/Intersection_Research-master/carData.csv");
 
-		// C:\Users\maxwe\Documents\Research 2019\Algorithm\Intersection_Research-master
-		// "/home/maxwell/Documents/Scripts/Intersection_Research-master/carData.csv");
-
 		// big data
 		String[] thisLines;
 		String thisLine;
 
-		// simulation parameters
-		long timeStep = 1;
-		System.out.print(timeStep);
-		int frames = ((20 * 100 * 2) + 4) - 1;
-
-		img = new BufferedImage(150, 150, BufferedImage.TYPE_INT_RGB);
-		g2 = (Graphics2D) img.getGraphics();
-		JFrame theWindow = new JFrame("Simulation");
-		theWindow.setVisible(true);
-
-		try {
-			Scanner scanner = new Scanner(file);
-
-			for (int i = 2; i < frames; i = i + 2) {
-
-				// TimeUnit.SECONDS.sleep(timeStep);
-				TimeUnit.MICROSECONDS.sleep(timeStep);
-				//map.clear();
-
-				//map.square(-InterSquare/2, -InterSquare/2, InterSquare/2);
-
-				//map.square(InterSquare/2, -InterSquare/2, InterSquare/2);
-				//map.square(InterSquare/2, InterSquare/2 , InterSquare/2);
-				//map.square(-InterSquare/2, InterSquare/2, InterSquare/2);
-
-				while (scanner.hasNextLine()) { // iterte through row
-					thisLine = scanner.nextLine();
-					// System.out.println(thisLine);
-					// get vin* and lane
-					thisLines = thisLine.split(",");
-					vin = (int) Double.parseDouble(thisLines[0]);
-					lane = (int) Double.parseDouble(thisLines[1]);
-					l = Double.parseDouble(thisLines[2]);
-					w = Double.parseDouble(thisLines[3]);
-
-					if (i > 1) {
-						// System.out.print(Double.parseDouble(thisLines[i]) + " " +
-						// Double.parseDouble(thisLines[i+1]) );
-						pos.setLocation(Double.parseDouble(thisLines[i]), Double.parseDouble(thisLines[i + 1]));
-					}
-					if ((pos.getX() == 10 && pos.getY() == -75) || (pos.getX() == 75 && pos.getY() == 5)
-							|| (pos.getX() == -5 && pos.getY() == 75) || (pos.getX() == -75 && pos.getY() == 5)
-							|| (pos.getX() == 0 && pos.getY() == 0)) {
-
-					} else {
-						g2.setColor(new Color((vin * 15) % 256, (vin * 7) % 256, (vin * 99) % 256));
-						g2.fillRect((int) pos.getX(), (int) pos.getY(), (int) w, (int) l);
-						g2.drawImage(img, 0, 0, null);
-
-						//map.setPenColor((vin * 15) % 256, (vin * 7) % 256, (vin * 99) % 256);
-						//map.filledRectangle(pos.getX(), pos.getY(), w, l);
-
-						// add acar
-						Point l1 = new Point(pos.getX() - w, pos.getY() + l);
-						Point r1 = new Point(pos.getX() + w, pos.getY() - l);
-
-						Rectangle tempCar = new Rectangle(l1, r1);
-						cars.add(tempCar);
-
-					}
-
-				}
-				theWindow.paint(g2);
-				g2.clearRect(0, 0, 75, 75);
-
-				scanner = new Scanner(file);
-
-				// check if any rectangle colided
-				for (int j = 0; j < cars.size(); j++) {
-					for (int j2 = 0; j2 < cars.size(); j2++) {
-						if ((cars.get(j).isOverLapping(cars.get(j2))) && (j2 != j)) {
-							System.out.println(j + " -- " + j2);
-						}
-					}
-				}
-
-				// delete all cars
-				cars.clear();
-				
-
+		// read in data
+		double[] tempData = new double[numberOfCars];
+		ArrayList<double[]> data = new ArrayList<double[]>();
+		Scanner scanner = new Scanner(file);
+		while (scanner.hasNextLine()) { // iterte through row
+			thisLine = scanner.nextLine();
+			thisLines = thisLine.split(",");
+			tempData = new double[numberOfCars];
+			// convert into double
+			for (int i = 0; i < thisLines.length; i++) {
+				tempData[i] = Double.parseDouble(thisLines[i]);
 			}
-			scanner.close();
-		} catch (
+			data.add(tempData);
+		}
+		scanner.close();
 
-		FileNotFoundException e) {
-			e.printStackTrace();
+		// display Data
+		for (int i = 0; i < data.size(); i++) {
+			double[] temp = data.get(i);
+			for (int j = 0; j < temp.length; j++) {
+				// System.out.print(temp[j] + "\t");
+			}
+			// System.out.println();
 		}
 
-		System.out.println("done");
+		for (int j = 4; j < data.size() - 4; j = j + 12) {
+
+			// System.out.println(j);
+
+			map.square(-InterSquare / 2, -InterSquare / 2, InterSquare / 2);
+			map.square(InterSquare / 2, -InterSquare / 2, InterSquare / 2);
+			map.square(InterSquare / 2, InterSquare / 2, InterSquare / 2);
+			map.square(-InterSquare / 2, InterSquare / 2, InterSquare / 2);
+
+			for (int i = 0; i < numberOfCars; i++) {
+
+				vin = (int) data.get(0)[i];
+				lane = (int) data.get(1)[i];
+				l = data.get(2)[i];
+				w = data.get(3)[i];
+
+				pos.setLocation(data.get(j)[i], data.get(j + 1)[i]);
+				// System.out.println(pos.toString());
+
+				if ((pos.getX() != 0.0 && pos.getY() != 0.0) && (Math.abs(pos.getX()) < 210) && (Math.abs(pos.getY()) < 210) ) {
+					map.setPenColor((vin * 15) % 256, (vin * 7) % 256, (vin * 99) % 256);
+
+					if (lane == 2 || lane == 4) {
+						double temp = w;
+						w = l;
+						l = temp;
+
+					}
+					map.filledRectangle(pos.getX(), pos.getY(), w, l);
+
+					// add a car
+					Point l1 = new Point(pos.getX() - w, pos.getY() + l);
+					Point r1 = new Point(pos.getX() + w, pos.getY() - l);
+
+					Rectangle tempCar = new Rectangle(l1, r1);
+					cars.add(tempCar);
+				}
+
+			}
+			// TimeUnit.MILLISECONDS.sleep(10);
+			map.clear();
+
+			// check if any rectangle colided
+
+			for (int k = 0; k < cars.size(); k++) {
+				for (int k2 = 0; k2 < cars.size(); k2++) {
+					if ((cars.get(k).isOverLapping(cars.get(k2))) && (k2 != k)) {
+						System.out.println(k + " -- " + k2);
+					} else {
+						System.out.println("good");
+					}
+				}
+			}
+			cars.clear();
+
+		}
+		System.out.print("done");
 
 	}
 }

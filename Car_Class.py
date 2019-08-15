@@ -1,20 +1,3 @@
-"""
-goals for car:
-
-abilities:
-    (1) send initial data when entering intersection
-    (2) receive an acceleration value to follow until inside middle of intersection (lane/reserved location eventually)
-    (3) request an acceleration value
-    (4) follow requested acceleration value until reached nominal speed
-
-Things to store:
-    (1) current trajectory
-    (2) requested_in trajectory
-    (3) requested_out trajectory
-
-
-"""
-
 import time
 import cmath, math
 import numpy as np
@@ -65,10 +48,9 @@ class Car:
     exitTime = 0  # time leaving intersection
 
     # Proposed Timeline
-    expectedTime0 = 0  # original specs to 95m ***100m for now
-    expectedTime00 = 0  # original specs to 105m
-    expectedTime01 = 0  # after first update to middle
-    expectedTime1 = 0  # after seconds update to end
+    expectedTime01 = 0  # after first update, time at P2
+    t1 = 0  # after seconds update to end
+    distanceAtT1 = -1
 
     # simulation specs
     max_time = 2000  #miliseconds
@@ -84,7 +66,7 @@ class Car:
         self.vin = VIN
         self.speed = speed
         self.accel0 = accel
-        self.enter = 0  # 0 if entering intesection -- 1 if in middle --- 2 if exiting
+        self.set = 0  # 0 if entering intesection -- 1 if in middle --- 2 if exiting
         self.enterTime0 = enterTime
 
         self.lane = lane
@@ -95,6 +77,8 @@ class Car:
         self.posY_OG = 0
         self.length = l
         self.width = w
+
+
 
 
 
@@ -121,13 +105,19 @@ class Car:
                 " ,Entered time: " + str(self.enterTime0) +
                 " ,Lane #: " + str(self.lane) +
                 " turn #: " + str(self.turn) +
-                " ,Expected time #: " + str(self.expectedTime0) +
+                " ,Expected time (P2)#: " + str(self.expectedTime0) +
                 " ,first requested accel #: " + str( self.accel01) +
                 "]")
 
     def updateAccel01(self, a):
         self.accel01 = self.accel01 + a[0]
         self.expectedTime01 = a[1]
+
+    def updateAccel1(self, a):
+        self.accel1 = a[0]
+        self.t1 = a[1]
+        dt = (self.t1 - self.expectedTime01)/1000.0
+        self.distanceAtT1 =  abs(self.p2_distance) + (dt*self.speed)  + (0.5 * self.accel1 * (dt ** 2))   # may have some error in there (cms)
 
     def updateExpectedTime01(self, t):
         self.expectedTime01 = t
@@ -136,7 +126,103 @@ class Car:
         path = self.piec0XY(T)
         return path
 
+################################
+    def distanceTravelledTime(self, t):
+        if(t >= self.enterTime0):
+            delta =  self.trajectory01((t-self.enterTime0)/ 1000.0, 0)
 
+            if (self.lane == 1):  # vericle lanes
+               # check for turn
+                if abs(delta) >= abs(self.p1_distance):
+                    if self.turn == 1:
+                        self.posY = -1 * self.inter_size / 2
+                        self.posX = self.posX_OG + (delta + self.p1_distance)
+                    elif self.turn == 2 and (abs(delta) >= abs(self.p2_distance)):
+                        self.posY = self.inter_size / 2
+                        self.posX = self.posX_OG - (delta + self.p2_distance)
+                    else:
+                        self.posX = self.posX_OG
+                        self.posY = self.posY_OG + delta
+
+                else:
+                    self.posX = self.posX_OG
+                    self.posY = self.posY_OG + delta
+            elif (self.lane == 3):
+               # check for turn
+                if abs(delta) >= abs(self.p1_distance):
+                    if self.turn == 1:
+                        self.posY = self.inter_size / 2
+                        self.posX = self.posX_OG + (delta - self.p1_distance)
+                    elif self.turn == 2 and (abs(delta) >= abs(self.p2_distance)):
+                        self.posY = -self.inter_size / 2
+                        self.posX = self.posX_OG - (delta - self.p2_distance)
+                    else:
+                        self.posX = self.posX_OG
+                        self.posY = self.posY_OG + delta
+
+                else:
+                    self.posX = self.posX_OG
+                    self.posY = self.posY_OG + delta
+            elif (self.lane == 2):
+                if abs(delta) >= abs(self.p1_distance):
+                    if self.turn == 1:
+                        self.posX = self.inter_size / 2
+                        self.posY = self.posY_OG + (delta + self.p1_distance)
+                    elif self.turn == 2 and (abs(delta) >= abs(self.p2_distance)):
+                        self.posX = -self.inter_size / 2
+                        self.posY = self.posY_OG - (delta + self.p2_distance)
+                    else:
+                        self.posY = self.posY_OG
+                        self.posX = self.posX_OG - delta
+
+                else:
+                    self.posY = self.posY_OG
+                    self.posX = self.posX_OG - delta
+            elif (self.lane == 4):
+                if abs(delta) >= abs(self.p1_distance):
+                    if self.turn == 1:
+                        self.posX = -self.inter_size / 2
+                        self.posY = self.posY_OG - (delta + self.p1_distance)
+                    elif self.turn == 2 and (abs(delta) >= abs(self.p2_distance)):
+                        self.posX = self.inter_size / 2
+                        self.posY = self.posY_OG + (delta + self.p2_distance)
+                    else:
+                        self.posY = self.posY_OG
+                        self.posX = self.posX_OG + delta
+
+                else:
+                    self.posY = self.posY_OG
+                    self.posX = self.posX_OG + delta
+            return self.posX, self.posY
+        else:
+            return 0.0, 0.0
+
+    def generatereservation(self):
+        tempRes = IC.Reservation(self.vin, self.speed, self.accel0, self.enterTime0, self.lane, self.turn, self.length, self.width)
+        return tempRes
+
+    #updatedSpeed
+    def generatereservationOUT(self):
+        newSpeed = self.speed + ((self.expectedTime01 - self.enterTime0)/1000.0) * self.accel01
+        tempRes = IC.Reservation(self.vin, newSpeed, self.accel0, self.enterTime0, self.lane, self.turn, self.length, self.width)
+        return tempRes
+
+
+
+    def readyForOutro(self, t):
+        # change distance for left and right turn
+        if self.trajectory01((t-self.enterTime0)/ 1000.0, 0) > abs(self.p2_distance):
+            return True
+        else:
+            return False
+
+    def checkForDone(self, t):
+        # change distance for left and right turn
+        if self.trajectory01((t - self.enterTime0) / 1000.0, 0) > 210:
+            return True
+        else:
+            return False
+#################################
 
 
     def piec0XY(self, T):
@@ -224,8 +310,8 @@ class Car:
                             self.posX = -self.inter_size / 2
                             self.posY = self.posY_OG - (delta + self.p2_distance)
                         else:
-                            self.posX = self.posX_OG
-                            self.posY = self.posY_OG + delta
+                            self.posY = self.posY_OG
+                            self.posX = self.posX_OG - delta
 
                     else:
                         self.posY = self.posY_OG
@@ -243,8 +329,8 @@ class Car:
                             self.posX = self.inter_size / 2
                             self.posY = self.posY_OG + (delta + self.p2_distance)
                         else:
-                            self.posX = self.posX_OG
-                            self.posY = self.posY_OG + delta
+                            self.posY = self.posY_OG
+                            self.posX = self.posX_OG + delta
 
                     else:
                         self.posY = self.posY_OG
@@ -263,7 +349,10 @@ class Car:
         return pos + (self.speed * time) + (0.5 * self.accel0 * (time ** 2))
 
     def trajectory01(self, time, pos):
-        return pos + (self.speed * time) + (0.5 * self.accel01 * (time ** 2))
+        if(time >= (self.t1/1000.0)):
+            return self.distanceAtT1 + (35.0 * ((time - self.t1) / 1000.0))
+        else:
+            return pos + (self.speed * time) + (0.5 * self.accel01 * (time ** 2))
 
     def trajectory01_turn(self,time, pos, right):
         print "turn"
